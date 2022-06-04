@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.target=JSONLoader
+comment1.params=season
+comment1.target=void\ loadLeagueFromJSON(int)
+numComments=2

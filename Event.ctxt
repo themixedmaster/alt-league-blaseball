@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.target=Event
+comment1.params=text\ time
+comment1.target=Event(java.lang.String,\ long)
+numComments=2

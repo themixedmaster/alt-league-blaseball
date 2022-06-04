@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=Feed
+comment1.params=
+comment1.target=void\ ViewFeed()
+comment2.params=season
+comment2.target=void\ viewSeason(int)
+comment3.params=season
+comment3.target=void\ viewGames(int)
+comment4.params=games
+comment4.target=java.util.ArrayList\ filterAllGames(Game[][])
+comment5.params=games
+comment5.target=java.util.ArrayList\ filterByDay(Game[][])
+comment6.params=games
+comment6.target=java.util.ArrayList\ filterByTeam(Game[][])
+comment7.params=games
+comment7.target=java.util.ArrayList\ filterByStarted(java.util.ArrayList)
+comment8.params=games
+comment8.target=void\ viewFilteredGames(java.util.ArrayList)
+comment9.params=game
+comment9.target=void\ watchGame(Game)
+numComments=10
