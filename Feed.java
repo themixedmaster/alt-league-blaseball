@@ -44,13 +44,13 @@ public class Feed
         System.out.println("2-Filter by team");
         switch(console.nextInt()){
             case 0:
-                viewFilteredGames(filterByStarted(filterAllGames(games)));
+                viewFilteredGames(filterByLive(filterAllGames(games)));
                 break;
             case 1:
-                viewFilteredGames(filterByStarted(filterByDay(games)));
+                viewFilteredGames(filterByLive(filterByDay(games)));
                 break;
             case 2:
-                viewFilteredGames(filterByStarted(filterByTeam(games)));
+                viewFilteredGames(filterByLive(filterByTeam(games)));
                 break;
         }
     }
@@ -95,10 +95,10 @@ public class Feed
         return filteredList;
     }
 
-    public static ArrayList<Game> filterByStarted(ArrayList<Game> games){
+    public static ArrayList<Game> filterByLive(ArrayList<Game> games){
         ArrayList<Game> filteredList = new ArrayList<Game>();
         for(Game game : games){
-            if(game.hasStarted())
+            if(game.isLive())
                 filteredList.add(game);
         }
         return filteredList;

@@ -11,27 +11,27 @@ public class Player
     public double tempBaserunning = 0;
     public double defense;
     public double tempDefense = 0;
-
-    public double aggression;
-    public double arrogance;
-    public double carcinization;
-    public double damage;
-    public double density;
-    public double dexterity;
-    public double dimensions;
-    public double effort;
-    public double focus;
-    public double fun;
-    public double grit;
-    public double hitPoints;
-    public double malleability;
-    public double mathematics;
-    public double numberOfEyes;
-    public double pinpointedness;
-    public double powder;
-    public double rejection;
-    public double splash;
-    public double wisdom;
+                                 //ILLEGAL KNOWLEDGE; for devs only
+    public double aggression;    //batting; ability to avoid flyouts
+    public double arrogance;     //baserunning; increases likelihood to attempt base-steal
+    public double carcinization; //defense; ability to prevent additional bases being runs
+    public double damage;        //defense; ability to ground out batters
+    public double density;       //baserunning; higher density = smaller strike zone
+    public double dexterity;     //baserunning; how good a player is at stealing bases
+    public double dimensions;    //pitching; makes batters more likely to strike, swinging
+    public double effort;        //baserunning; ability to run additional bases
+    public double focus;         //batting; increaes likelihood to swing, avoid strike, looking.
+    public double fun;           //pitching; decreases chance for batter to predict the pitch
+    public double grit;          //pitching; makes batters more likely to strike, swinging.
+    public double hitPoints;     //baserunning; ability to avoid ground outs
+    public double malleability;  //batting; decreases chance to strike, swinging
+    public double mathematics;   //defense; increaes chance to catch a flyout
+    public double numberOfEyes;  //batting; increases chance to predict the pitcher's throw.
+    public double pinpointedness;//pitching; increases accuracy, lower chance to miss strike zone
+    public double powder;        //pitching; increases chance for batter to hit a foul ball
+    public double rejection;     //defense; makes players less likely to attempt base-steals
+    public double splash;        //batting; decreases chance of hitting fouls when hitting the ball.
+    public double wisdom;        //defense; decreases chance of successful base steals
 
     String pregameRitual;
     String coffeeStyle;

@@ -1,5 +1,5 @@
 #BlueJ class context
 comment0.target=Weather
 comment1.params=game
-comment1.target=Weather(NewGame)
+comment1.target=Weather(Game)
 numComments=2

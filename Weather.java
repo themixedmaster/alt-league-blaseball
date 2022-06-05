@@ -1,8 +1,8 @@
 public class Weather
 {
     String name;
-    NewGame game;
-    public Weather(NewGame game){
+    Game game;
+    public Weather(Game game){
         this.game = game;
     }
 }

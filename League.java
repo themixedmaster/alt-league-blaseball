@@ -50,7 +50,8 @@ public class League
             for(Game game : games)
                 for(int x = 0; x < day; x++){
                     for(Game g : getCurrentGames(x))
-                        g.runGame();
+                        //g.RunGame();
+                        g.simulateGame();
                 }
     }
 
@@ -216,12 +217,12 @@ public class League
         scheduleSeason(seasonStartTime);
     }
 
-    public static void scheduleSeason(long startTime){
+    /*public static void scheduleSeason(long startTime){//timeless league lol
         seasonGames = new Game[1][1];
         seasonGames[0][0] = new Game(ultraDark[0],ultraDark[1],1,seasonStartTime,season); 
-    }
+    }/**/
     
-    /*public static void scheduleSeason(long startTime){
+    public static void scheduleSeason(long startTime){
         seasonGames = new Game[99][getTeams().length / 2];
         for(int x = 0; x < 99; x+=3){
             ArrayList<Team> darkTeams = new ArrayList<Team>();
@@ -246,9 +247,9 @@ public class League
                 int r2 = (int)(r.nextDouble() * darkTeams.size());
                 Team t2 = darkTeams.get(r2);
                 darkTeams.remove(r2);
-                seasonGames[x][y] = new Game(t1,t2,x+1,startTime + (3600000 * x),season); 
-                seasonGames[x+1][y] = new Game(t1,t2,x+2,startTime + (3600000 * (x+1)),season); 
-                seasonGames[x+2][y] = new Game(t1,t2,x+3,startTime + (3600000 * (x+2)),season); 
+                seasonGames[x][y] = new Game(t1,t2,x+1,startTime + (3600000 * x)); 
+                seasonGames[x+1][y] = new Game(t1,t2,x+2,startTime + (3600000 * (x+1))); 
+                seasonGames[x+2][y] = new Game(t1,t2,x+3,startTime + (3600000 * (x+2))); 
             }
             for(;lightTeams.size() > 1; y++){
                 int r1 = (int)(r.nextDouble() * lightTeams.size());
@@ -257,12 +258,12 @@ public class League
                 int r2 = (int)(r.nextDouble() * lightTeams.size());
                 Team t2 = lightTeams.get(r2);
                 lightTeams.remove(r2);
-                seasonGames[x][y] = new Game(t1,t2,x+1,startTime + (3600000 * x),season); 
-                seasonGames[x+1][y] = new Game(t1,t2,x+2,startTime + (3600000 * (x+1)),season); 
-                seasonGames[x+2][y] = new Game(t1,t2,x+3,startTime + (3600000 * (x+2)),season); 
+                seasonGames[x][y] = new Game(t1,t2,x+1,startTime + (3600000 * x)); 
+                seasonGames[x+1][y] = new Game(t1,t2,x+2,startTime + (3600000 * (x+1))); 
+                seasonGames[x+2][y] = new Game(t1,t2,x+3,startTime + (3600000 * (x+2))); 
             }
         }
-    }*/
+    }
 
     public static void schedulePostseason1(){
         Team[] darkTeams = new Team[ultraDark.length + moderateDark.length];
@@ -281,10 +282,10 @@ public class League
         for(int x = 0; x < 5; x++){
             //adjust +99 to start saturday the next day
             //System.out.println(seasonGames[0][0].season + "\n\n\n\n");
-            postseason1[x][0] = new Game(darkTeams[0],darkTeams[3],x+100,getSeasonStartTime(seasonGames[0][0].season) + ((long)3600000 * (102 + x)),seasonGames[0][0].season);
-            postseason1[x][1] = new Game(darkTeams[1],darkTeams[2],x+100,getSeasonStartTime(seasonGames[0][0].season) + ((long)3600000 * (102 + x)),seasonGames[0][0].season);
-            postseason1[x][2] = new Game(lightTeams[0],lightTeams[3],x+100,getSeasonStartTime(seasonGames[0][0].season) + ((long)3600000 * (102 + x)),seasonGames[0][0].season);
-            postseason1[x][3] = new Game(lightTeams[1],lightTeams[2],x+100,getSeasonStartTime(seasonGames[0][0].season) + ((long)3600000 * (102 + x)),seasonGames[0][0].season);
+            postseason1[x][0] = new Game(darkTeams[0],darkTeams[3],x+100,seasonStartTime + ((long)3600000 * (102 + x)));
+            postseason1[x][1] = new Game(darkTeams[1],darkTeams[2],x+100,seasonStartTime + ((long)3600000 * (102 + x)));
+            postseason1[x][2] = new Game(lightTeams[0],lightTeams[3],x+100,seasonStartTime + ((long)3600000 * (102 + x)));
+            postseason1[x][3] = new Game(lightTeams[1],lightTeams[2],x+100,seasonStartTime + ((long)3600000 * (102 + x)));
         }
     }
 
@@ -296,8 +297,8 @@ public class League
         postseason2 = new Game[5][2];
         for(int x = 0; x < 5; x++){
             //adjust +104 to start saturday the next day
-            postseason2[x][0] = new Game(darkA,darkB,x+105,getSeasonStartTime(seasonGames[0][0].season) + ((long)3600000 * (121 + x)),seasonGames[0][0].season);
-            postseason2[x][1] = new Game(lightA,lightB,x+105,getSeasonStartTime(seasonGames[0][0].season) + ((long)3600000 * (121 + x)),seasonGames[0][0].season);
+            postseason2[x][0] = new Game(darkA,darkB,x+105,seasonStartTime + ((long)3600000 * (121 + x)));
+            postseason2[x][1] = new Game(lightA,lightB,x+105,seasonStartTime + ((long)3600000 * (121 + x)));
         }
     }
 
@@ -307,7 +308,7 @@ public class League
         postseason3 = new Game[5][1];
         for(int x = 0; x < 5; x++){
             //adjust +109 to start saturday the next day
-            postseason3[x][0] = new Game(dark,light,x+110,getSeasonStartTime(seasonGames[0][0].season) + ((long)3600000 * (126 + x)),seasonGames[0][0].season);
+            postseason3[x][0] = new Game(dark,light,x+110,seasonStartTime + ((long)3600000 * (126 + x)));
         }
     }
 
@@ -328,11 +329,9 @@ public class League
     }
 
     public static int getGameDay(){
-        if(System.currentTimeMillis() < seasonStartTime){
+        if(System.currentTimeMillis() < seasonStartTime)
             return 0;
-        }
-        return 1;
-        /*long time = seasonStartTime;
+        long time = seasonStartTime;
         int day = 0;
         if(System.currentTimeMillis() < seasonStartTime){
             return 0;
@@ -360,7 +359,7 @@ public class League
         if(day > 114){
             return 115;
         }
-        return day;*/
+        return day;
     }
 
     public static Team[] getTeams(){
@@ -418,7 +417,7 @@ public class League
     public static void runAllGames(){
         for(Game[] games : seasonGames){
             for(Game game : games){
-                game.runGame();
+                game.simulateGame();
             }
         }
     }
@@ -426,7 +425,7 @@ public class League
     public static void runAllPostseason1Games(){
         for(Game[] games : postseason1){
             for(Game game : games){
-                game.runGame();
+                game.simulateGame();
             }
         }
     }
@@ -434,7 +433,7 @@ public class League
     public static void runAllPostseason2Games(){
         for(Game[] games : postseason2){
             for(Game game : games){
-                game.runGame();
+                game.simulateGame();
             }
         }
     }
@@ -442,14 +441,13 @@ public class League
     public static void runAllPostseason3Games(){
         for(Game[] games : postseason3){
             for(Game game : games){
-                game.runGame();
+                game.simulateGame();
             }
         }
     }
 
     public static Game[][] getGames(int season){
         scheduleSeason(season);
-        setSeasonOfGames(seasonGames,season);
         runAllGames();
         runPostseason(114);
         Game[][] games = new Game[114][];
@@ -457,14 +455,6 @@ public class League
             games[x] = getCurrentGames(x+1);
         }
         return games;
-    }
-
-    public static void setSeasonOfGames(Game[][] games, int season){
-        for(int x = 0; x < games.length; x++){
-            for(int y = 0; y < games[x].length; y++){
-                games[x][y].season = season;
-            }
-        }
     }
     
     public static void recapSeason0(){
