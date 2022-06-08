@@ -1,3 +1,4 @@
+//I'm probably going to have to rewrite this from scratch, we'll see.
 import java.util.*;
 
 public class Feed
@@ -136,13 +137,13 @@ public class Feed
             System.out.println("1-Rewatch game");
             switch(console.nextInt()){
                 case 0:
-                    game.watch();
-                    game.runGame();
+                    //game.watch();
+                    //game.runGame();
                     break;
                 case 1:
                     game.startTime = System.currentTimeMillis();
-                    game.watch();
-                    game.runGame();
+                    //game.watch();
+                    //game.runGame();
                     break;
             }
     }

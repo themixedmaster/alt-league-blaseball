@@ -3,7 +3,7 @@ import java.util.HashMap;
 
 public class Game //name will be changed to Game when finished and replace current Game class
 {
-    static int tick = 5000;
+    static int tick = 100;
     Random r;
 
     Team teamA;
@@ -31,9 +31,9 @@ public class Game //name will be changed to Game when finished and replace curre
     double scoreB;
     int winsA = 0;
     int winsB = 0;
-    double balls = 0;
-    double strikes = 0;
-    double outs = 0;
+    int balls = 0;
+    int strikes = 0;
+    int outs = 0;
     int activeTeamBat = 0;
     int inactiveTeamBat = 0;
 
@@ -44,11 +44,13 @@ public class Game //name will be changed to Game when finished and replace curre
         this.teamB = teamB;
         this.dayNum = dayNum;
         this.startTime = startTime;
+        currentTime = startTime;
         events = new ArrayList<Event>();
     }
-    //the code is entirely untested
+    //code is currently in testing phase
     public void simulateGame(){
         r = new Random(dayNum *  + (long)Math.pow(teamA.favor,teamB.favor) + (long)Math.pow(teamB.favor,teamA.favor));
+        setRandomWeather();
         addEvent(teamA.getTeamName() + " vs. " + teamB.getTeamName(),0);
 
         inning = 1;
@@ -56,14 +58,16 @@ public class Game //name will be changed to Game when finished and replace curre
         scoreB = 0;
         top = true;
 
+        pitcherA = teamA.rotation[(dayNum - 1 + teamA.rotation.length) % teamA.rotation.length];
+        pitcherB = teamB.rotation[(dayNum - 1 + teamB.rotation.length) % teamB.rotation.length];
+        
         pitchingTeam = teamA;
         battingTeam = teamB;
         pitcher = pitcherA;
         waitingPitcher = pitcherB;
-        clearBases();
 
         addEvent("Blay pall!",tick);
-
+        beforeFirstInning();
         while(!endOfGame()){
             String s;
             if(top)
@@ -72,6 +76,7 @@ public class Game //name will be changed to Game when finished and replace curre
                 s = "Bottom";
             addEvent(s + " of " + inning + ", " + battingTeam.getTeamName() + " batting. " + pitcher.name + " pitching.",tick);
             while(!endOfInning()){
+                clearBases();
                 setNextBatter();
                 while(!strikeout()){
                     doSteals();
@@ -80,8 +85,9 @@ public class Game //name will be changed to Game when finished and replace curre
                 strikes = 0;
                 balls = 0;
                 outs++;
+                addEvent("[Out " + outs + "]",0);
             }
-            outs++;
+            outs = 0;
             if(top)
                 top = false;
             else{
@@ -108,27 +114,51 @@ public class Game //name will be changed to Game when finished and replace curre
         giveWins();
     }
 
-    //precondition: simulateGame() has been called already
-    boolean isLive(){
-        //left off here, GameTester is broken
+    void beforeFirstInning(){
+        //nothing in here for now, maybe there will be later, idk
     }
     
+    //precondition: simulateGame() has been called already
+    public String gameName(){
+        return weather.name() + ", " + teamA.getTeamName() + " vs. " + teamB.getTeamName() + ", Day " + dayNum;
+    }
+
+    //precondition: simulateGame() has been called already
+    boolean isLive(){
+        //System.out.println(dayNum + " " + startTime + " " + System.currentTimeMillis() + " " + currentTime);
+        return currentTime >= System.currentTimeMillis() && startTime <= System.currentTimeMillis();
+    }
+
+    boolean gameEffectsRecord(){
+        return dayNum < 100;
+    }
+
     void giveWins(){
         Team winningTeam;
         Team losingTeam;
         if(scoreA > scoreB){
             winningTeam = teamA;
             losingTeam = teamB;
-            teamA.addWin();
+            winsA++;
+            if(gameEffectsRecord()){
+                teamA.addWin();
+                teamB.lose();
+            }
         }else{
             winningTeam = teamB;
             losingTeam = teamA;
-            teamB.addWin();
+            winsB++;
+            if(gameEffectsRecord()){
+                teamB.addWin();
+                teamA.lose();
+            }
         }
-        teamA.win(winsA);
-        teamB.win(winsB);
+        if(gameEffectsRecord()){
+            teamA.win(winsA);
+            teamB.win(winsB);
+        }
     }
-    
+
     void stealAttempt(int baseNum){
         Player defender = randomDefender();
         double urge = r.nextDouble() * 10 + bases[baseNum].arrogance - defender.rejection;
@@ -258,6 +288,7 @@ public class Game //name will be changed to Game when finished and replace curre
                                     break;
                             }
                             advanceBaserunners(basesRun);
+                            setNextBatter();
                         }
                     }
                 }
@@ -312,6 +343,7 @@ public class Game //name will be changed to Game when finished and replace curre
         if(balls >= 4){
             addEvent(batter.name + " draws a walk.",tick);
             walk();
+            setNextBatter();
         }else
             addEvent("Ball. " + balls + "-" + strikes,tick);
     }
@@ -368,8 +400,13 @@ public class Game //name will be changed to Game when finished and replace curre
     boolean endOfInning(){
         return outs >= 3;
     }
-
+    
+    //sets the next batter unless the inning is about to end
     void setNextBatter(){
+        if(endOfInning())
+            return;
+        strikes = 0;
+        balls = 0;
         do{
             activeTeamBat++;
             batter = battingTeam.lineup[(activeTeamBat-1) % battingTeam.lineup.length];
@@ -380,6 +417,13 @@ public class Game //name will be changed to Game when finished and replace curre
     void addEvent(String s, int tick){
         events.add(new Event(s,currentTime));
         currentTime+=tick;
+    }
+    
+    public void playLog(){
+        for(int x = 0; x < events.size(); x++){
+            while(System.currentTimeMillis() < events.get(x).time());
+            System.out.println(events.get(x).text);
+        }
     }
 
     void setRandomWeather(){

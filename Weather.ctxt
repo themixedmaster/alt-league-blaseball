@@ -2,4 +2,6 @@
 comment0.target=Weather
 comment1.params=game
 comment1.target=Weather(Game)
-numComments=2
+comment2.params=
+comment2.target=java.lang.String\ name()
+numComments=3

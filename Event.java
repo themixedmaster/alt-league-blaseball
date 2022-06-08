@@ -6,4 +6,12 @@ public class Event
         this.text = text;
         this.time = time;
     }
+    
+    public long time(){
+        return time;
+    }
+    
+    public String text(){
+        return text;
+    }
 }

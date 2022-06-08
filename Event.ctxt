@@ -2,4 +2,8 @@
 comment0.target=Event
 comment1.params=text\ time
 comment1.target=Event(java.lang.String,\ long)
-numComments=2
+comment2.params=
+comment2.target=long\ time()
+comment3.params=
+comment3.target=java.lang.String\ text()
+numComments=4

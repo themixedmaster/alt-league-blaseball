@@ -1,5 +1,4 @@
 import java.util.*;
-
 public class Player
 {
     String name;
@@ -39,6 +38,8 @@ public class Player
     int fate;
     String soulscream;
     public int id;
+    HashMap<String,Double> statistics; //stuff like balls hit, number of pitches, etc
+    
     public boolean fan = false; //for altalt fever weather
     public boolean cat = false; //for altalt meownsoon weather
     public boolean elsewhere = false; //for altalt moon weather
@@ -77,18 +78,52 @@ public class Player
         splash = randomUnweightedStat();
         wisdom = randomUnweightedStat();
         
-        this.batting = (density + numberOfEyes / 2 + focus / 4 + malleability / 8 + splash * 3 / 4 + aggression * 3 / 32) / 2.28125;
+        /*this.batting = (density + numberOfEyes / 2 + focus / 4 + malleability / 8 + splash * 3 / 4 + aggression * 3 / 32) / 2.28125;
         this.pitching = (pinpointedness + fun / 2 + grit / 4 + dimensions / 8 + powder * 3 / 16) / 2.1875;
         this.baserunning = (hitPoints + effort / 2 + arrogance / 20 + dexterity / 40) / 1.575;
-        this.defense = (mathematics + damage / 2 + carcinization / 4 + rejection / 20 + wisdom / 40) / 1.825;
+        this.defense = (mathematics + damage / 2 + carcinization / 4 + rejection / 20 + wisdom / 40) / 1.825;/**/
+        this.batting = (density + numberOfEyes + focus + malleability + splash + aggression ) / 6;
+        this.pitching = (pinpointedness + fun + grit + dimensions + powder) / 5;
+        this.baserunning = (hitPoints + effort + arrogance + dexterity ) / 4;
+        this.defense = (mathematics + damage + carcinization + rejection + wisdom ) / 5;
         
         this.pregameRitual = pregameRitual;
         this.coffeeStyle = coffeeStyle;
         this.bloodType = bloodType;
         this.fate = fate;
         this.soulscream = soulscream;
+        statistics = new HashMap<String,Double>();
     }
 
+    public void addStatistic(String statistic){
+        addStatistic(statistic, 1.0);
+    }
+    
+    public void addStatistic(String statistic, double amount){
+        if(statistics.containsKey(statistic))
+            statistics.put(statistic,statistics.get(statistic) + amount);
+        else
+            statistics.put(statistic,amount);
+    }
+    
+    public void printStatistics(){
+        String longestKey = "";
+        for(Map.Entry<String,Double> entry : statistics.entrySet())
+            if(entry.getKey().length() > longestKey.length())
+                longestKey = entry.getKey();
+        int i = longestKey.length();
+        for(Map.Entry<String,Double> entry : statistics.entrySet()){
+            System.out.println(addSpaces(entry.getKey(),i) + ": " + entry.getValue());
+        }
+    }
+    
+    public static String addSpaces(String s, int length){
+        while(s.length() < length){
+            s = "" + s;
+        }
+        return s;
+    }
+    
     public void setFlavor(String pregameRitual, String coffeeStyle, String bloodType, int fate, String soulscream){
         this.pregameRitual = pregameRitual;
         this.coffeeStyle = coffeeStyle;

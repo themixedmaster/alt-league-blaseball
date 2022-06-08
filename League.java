@@ -11,15 +11,14 @@ public class League
     public static Game[][] postseason3;
     public static ArrayList<Player> birdNest; /**the name of this array list is ILLEGAL KNOWLEDGE*/
     public static ArrayList<Player> deceased;
-    public static long seasonStartTime = 1653318000 * (long)1000;// - 3600000 *114;
+    public static long seasonStartTime = System.currentTimeMillis();//1653318000 * (long)1000;// - 3600000 *114;
     //public static long seasonStartTime = 1651503600 * (long)1000;// + 3600000 * (long)17;// - 60000 * (long)12;// - (long)(86400 * 1000 * 5) - (long)(3600 * 1000 * 22);
     public static int season = Integer.MIN_VALUE;
     static Random r;
     public static void resetLeague(){
-        recapVortex();
-        //recapSeason3();
-        r = new Random(Integer.MIN_VALUE);
-        season = Integer.MIN_VALUE;
+        recapSeason3();
+        r = new Random(-4);
+        season = -4;
         scheduleSeason(seasonStartTime);
         //Player[] god = new Player[1];
         //god[0] = new Player("God",10,10,10,10);
@@ -45,12 +44,76 @@ public class League
         }
     }
 
+    public static ArrayList<Game> getAllGames(){
+        int day = getGameDay();
+        ArrayList<Game> allGames = new ArrayList<Game>();
+        for(Game[] games : seasonGames){
+            for(Game game : games){
+                allGames.add(game);
+            }
+        }
+        if(day >= 100){
+            schedulePostseason1();
+            for(Game[] games : postseason1){
+                for(Game game : games){
+                    allGames.add(game);
+                }
+            }
+        }
+        if(day >= 105){
+            schedulePostseason2();
+            for(Game[] games : postseason2){
+                for(Game game : games){
+                    allGames.add(game);
+                }
+            }
+        }
+        if(day >= 110){
+            schedulePostseason3();
+            for(Game[] games : postseason3){
+                for(Game game : games){
+                    allGames.add(game);
+                }
+            }
+        }
+        return allGames;
+    }
+
+    public static void runGamesUpToDate(){
+        int day = getGameDay();
+        for(Game[] games : seasonGames)
+            for(Game game : games)
+                if(game.dayNum < day)
+                    game.simulateGame();
+        if(day >= 100){
+            schedulePostseason1();
+            for(Game[] games : postseason1)
+                for(Game game : games)
+                    if(game.dayNum < day)
+                        game.simulateGame();
+        }
+        if(day >= 105){
+            schedulePostseason2();
+            for(Game[] games : postseason2)
+                for(Game game : games)
+                    if(game.dayNum < day)
+                        game.simulateGame();
+        }
+        if(day >= 110){
+            schedulePostseason3();
+            for(Game[] games : postseason3)
+                for(Game game : games)
+                    if(game.dayNum < day)
+                        game.simulateGame();
+        }
+    }
+
     public static void runGamesUpToDay(int day){
         for(Game[] games : seasonGames)
             for(Game game : games)
                 for(int x = 0; x < day; x++){
                     for(Game g : getCurrentGames(x))
-                        //g.RunGame();
+                    //g.RunGame();
                         g.simulateGame();
                 }
     }
@@ -79,25 +142,25 @@ public class League
     public static void printLeague(){
         sortLeague();
         int l = longestTeamNameLength();
-        System.out.println("Ascended(Ascended) League Blaseball");
-        System.out.println("\nTime League");//dark league
-        System.out.println("    Nil Time");//ultra dark
+        System.out.println("Alt(Alt) League Blaseball");
+        System.out.println("\nDark League");//dark league
+        System.out.println("    Ultra Dark");//ultra dark
         for(int x = 0;x < ultraDark.length;x++){
             Team team = ultraDark[x];
             System.out.println("        " + team.logo + " " + addSpaces(team.getTeamName(),l) + " " + team.getWins() + " (" + team.actualWins + "-" + team.getLosses() + ")");
         }
-        System.out.println("    [Redacted]");//moderate dark
+        System.out.println("    Moderate Dark");//moderate dark
         for(int x = 0;x < moderateDark.length;x++){
             Team team = moderateDark[x];
             System.out.println("        " + team.logo + " " + addSpaces(team.getTeamName(),l) + " " + team.getWins() + " (" + team.actualWins + "-" + team.getLosses() + ")");
         }
-        System.out.println("\nSpace League");//light league
-        System.out.println("    [Redacted]");//ultra light
+        System.out.println("\nLight League");//light league
+        System.out.println("    Ultra Light");//ultra light
         for(int x = 0;x < ultraLight.length;x++){
             Team team = ultraLight[x];
             System.out.println("        " + team.logo + " " + addSpaces(team.getTeamName(),l) + " " + team.getWins() + " (" + team.actualWins + "-" + team.getLosses() + ")");
         }
-        System.out.println("    [Redacted]");//moderate light
+        System.out.println("    Moderate Light");//moderate light
         for(int x = 0;x < moderateLight.length;x++){
             Team team = moderateLight[x];
             System.out.println("        " + team.logo + " " + addSpaces(team.getTeamName(),l) + " " + team.getWins() + " (" + team.actualWins + "-" + team.getLosses() + ")");
@@ -112,12 +175,16 @@ public class League
         }
         return length;
     }
-    
+
     public static String addSpaces(String s, int length){
         while(s.length() < length){
             s = s + " ";
         }
         return s;
+    }
+
+    public static Team getChampion(){
+        return getRoundWinner(League.postseason3, 0);
     }
     
     public static void printPostseason(){
@@ -218,10 +285,10 @@ public class League
     }
 
     /*public static void scheduleSeason(long startTime){//timeless league lol
-        seasonGames = new Game[1][1];
-        seasonGames[0][0] = new Game(ultraDark[0],ultraDark[1],1,seasonStartTime,season); 
+    seasonGames = new Game[1][1];
+    seasonGames[0][0] = new Game(ultraDark[0],ultraDark[1],1,seasonStartTime,season); 
     }/**/
-    
+
     public static void scheduleSeason(long startTime){
         seasonGames = new Game[99][getTeams().length / 2];
         for(int x = 0; x < 99; x+=3){
@@ -312,6 +379,10 @@ public class League
         }
     }
 
+    public static Game[] getCurrentGames(){
+        return getCurrentGames(getGameDay());
+    }
+
     public static Game[] getCurrentGames(int day){
         if(day < 1 || day > 114){
             return null;
@@ -395,7 +466,7 @@ public class League
         }
         return teams;
     }
-    
+
     public static ArrayList<Player> allPlayers(){
         ArrayList<Player> players = new ArrayList<Player>();
         for(Team t : getTeams()){
@@ -456,7 +527,7 @@ public class League
         }
         return games;
     }
-    
+
     public static void recapSeason0(){
         r = new Random(1);//IMPORTANT: Change to 1 before publishing!!
         ultraDark = new Team[6];
@@ -574,23 +645,23 @@ public class League
         Blessings.defenseReal(moderateLight[5]);
         Blessings.waitImBatting(ultraDark[1]); //potluck
     }
-    
+
     public static void recapVortex(){
-         r = new Random(Integer.MIN_VALUE);
+        r = new Random(Integer.MIN_VALUE);
         ultraDark = new Team[2];
         moderateDark = new Team[0];
         ultraLight = new Team[0];
         moderateLight = new Team[0];
         ultraDark[0]= new Team("Siesta","Endless","🛏",1,"EDL");
         ultraDark[1]= new Team("Insomniacs","Eternal","⌛",2,"ETR");
-        
+
         birdNest = new ArrayList<Player>();
         deceased = new ArrayList<Player>();
         for(Player p : allPlayers()){
             PlayerMaker.addFlavor(p);
         }
     }
-    
+
     public static void recapAltAlt(){
         r = new Random(-1);//IMPORTANT: Change to -1 before publishing!!
         ultraDark = new Team[11];
@@ -635,7 +706,7 @@ public class League
         moderateLight[9] = new Team("Extras","Fill-in","☎",100,"FIL");
         ultraDark[9] = new Team("Sledgehammers","Pasadena","🔨",36,"PSD");
         moderateDark[9] = new Team("Muffins","Milan","🧁",37,"MLN");
-        
+
         Team fish = ultraDark[0];
         Team bigLizards = ultraDark[1];
         Team crosses = ultraDark[2];
@@ -672,19 +743,19 @@ public class League
         Team charmers = moderateLight[6];
         Team pastries = moderateLight[7];
         Team sledgehammers = ultraDark[9];
-        
+
         birdNest = new ArrayList<Player>();
         deceased = new ArrayList<Player>();
         for(Player p : allPlayers()){
             PlayerMaker.addFlavor(p);
         }
-        
+
         Team muffins = moderateDark[9];
         Team extras = moderateLight[9];
         for(Player p : allPlayers()){
             PlayerMaker.addFlavor(p);
         }
-        
+
         ultraLight[9] = new Team("Kings","Maximus","👑",38,"MAX");
         moderateLight[8] = new Team("Suits","New York New York","🕴",39,"ÑÑS");
         moderateLight[9] = new Team("Urns","Uruguay","⚱",40,"URN");
@@ -705,8 +776,7 @@ public class League
         for(Player p : stargazers.getActivePlayers()){
             PlayerMaker.addFlavor(p);
         }
-        
-        
+
         Blessings.freshStart(cups);
         Blessings.freshStart(dreamers);
         Blessings.freshStart(pharaohs);
@@ -759,6 +829,6 @@ public class League
             moderateLight[x] = teams.get(random);
             teams.remove(random);
         }
-        
+
     }
 }
