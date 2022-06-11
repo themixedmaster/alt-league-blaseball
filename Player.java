@@ -10,7 +10,7 @@ public class Player
     public double tempBaserunning = 0;
     public double defense;
     public double tempDefense = 0;
-                                 //ILLEGAL KNOWLEDGE; for devs only
+    //ILLEGAL KNOWLEDGE; for devs only
     public double aggression;    //batting; ability to avoid flyouts
     public double arrogance;     //baserunning; increases likelihood to attempt base-steal
     public double carcinization; //defense; ability to prevent additional bases being runs
@@ -39,7 +39,7 @@ public class Player
     String soulscream;
     public int id;
     HashMap<String,Double> statistics; //stuff like balls hit, number of pitches, etc
-    
+
     public boolean fan = false; //for altalt fever weather
     public boolean cat = false; //for altalt meownsoon weather
     public boolean elsewhere = false; //for altalt moon weather
@@ -53,10 +53,10 @@ public class Player
     public String getName(){
         return name;
     }
-    
+
     public Player(String name){
         this.name = name;
-        
+
         aggression = randomUnweightedStat();
         arrogance = randomUnweightedStat();
         carcinization = randomUnweightedStat();
@@ -77,7 +77,7 @@ public class Player
         rejection = randomUnweightedStat();
         splash = randomUnweightedStat();
         wisdom = randomUnweightedStat();
-        
+
         /*this.batting = (density + numberOfEyes / 2 + focus / 4 + malleability / 8 + splash * 3 / 4 + aggression * 3 / 32) / 2.28125;
         this.pitching = (pinpointedness + fun / 2 + grit / 4 + dimensions / 8 + powder * 3 / 16) / 2.1875;
         this.baserunning = (hitPoints + effort / 2 + arrogance / 20 + dexterity / 40) / 1.575;
@@ -86,7 +86,7 @@ public class Player
         this.pitching = (pinpointedness + fun + grit + dimensions + powder) / 5;
         this.baserunning = (hitPoints + effort + arrogance + dexterity ) / 4;
         this.defense = (mathematics + damage + carcinization + rejection + wisdom ) / 5;
-        
+
         this.pregameRitual = pregameRitual;
         this.coffeeStyle = coffeeStyle;
         this.bloodType = bloodType;
@@ -95,17 +95,21 @@ public class Player
         statistics = new HashMap<String,Double>();
     }
 
+    public void clearStatistics(){
+        statistics = new HashMap<String,Double>();
+    }
+
     public void addStatistic(String statistic){
         addStatistic(statistic, 1.0);
     }
-    
+
     public void addStatistic(String statistic, double amount){
         if(statistics.containsKey(statistic))
             statistics.put(statistic,statistics.get(statistic) + amount);
         else
             statistics.put(statistic,amount);
     }
-    
+
     public void printStatistics(){
         String longestKey = "";
         for(Map.Entry<String,Double> entry : statistics.entrySet())
@@ -113,17 +117,33 @@ public class Player
                 longestKey = entry.getKey();
         int i = longestKey.length();
         for(Map.Entry<String,Double> entry : statistics.entrySet()){
-            System.out.println(addSpaces(entry.getKey(),i) + ": " + entry.getValue());
+            String value;
+            double d = getStatistic(entry.getKey());
+            if(d % 1 != 0)
+                value = "" + d;
+            else{
+                value = "" + (int)d;
+            }
+            System.out.println("  " + addSpaces(entry.getKey(),i) + ": " + value);
+        }
+        System.out.println();
+    }
+
+    public double getStatistic(String statistic){
+        try{
+            return statistics.get(statistic);
+        }catch(NullPointerException e){
+            return 0;
         }
     }
-    
+
     public static String addSpaces(String s, int length){
         while(s.length() < length){
-            s = "" + s;
+            s = " " + s;
         }
         return s;
     }
-    
+
     public void setFlavor(String pregameRitual, String coffeeStyle, String bloodType, int fate, String soulscream){
         this.pregameRitual = pregameRitual;
         this.coffeeStyle = coffeeStyle;
@@ -139,7 +159,7 @@ public class Player
     public static double randomUnweightedStat(){
         return League.r.nextDouble() * 5;
     }
-    
+
     public double getBatting(){
         return batting + tempBatting;
     }
@@ -199,7 +219,7 @@ public class Player
         printStat(defense);
         System.out.println();
     }
-    
+
     public void printAdvancedStats(){
         System.out.print("Aggression      ");
         printStat(aggression);

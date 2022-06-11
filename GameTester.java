@@ -126,13 +126,16 @@ public class GameTester
                     System.out.println("BIRD: [BIRD NOISES]");
                     System.out.println("BIRD: I brought back the normal teams.");
                     System.out.println("BIRD: The regular players are still sleeping though.");
-                    System.out.println("BIRD: I'm hard at work over here.");
-                    System.out.println("BIRD: Blay pall!");
+                    System.out.println("BIRD: I've managed to salvage some of the feed.");
+                    System.out.println("BIRD: Blay pall.");
                     System.out.println("BIRD: [BIRD NOISES]");
+                    System.out.println("\nThe Mantle creaks.");
+                    System.out.println("A visceral mass.");
+                    System.out.println("The hall.");
                     System.out.println();
                     break;
                 case 3:
-                    Feed.ViewFeed();//this will just be checking player statistics for now
+                    Feed.ViewFeed();//currently only works with current season
                     break;
                 case 4:
                     break;

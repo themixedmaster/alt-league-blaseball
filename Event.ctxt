@@ -2,8 +2,10 @@
 comment0.target=Event
 comment1.params=text\ time
 comment1.target=Event(java.lang.String,\ long)
-comment2.params=
-comment2.target=long\ time()
+comment2.params=time
+comment2.target=void\ setTime(long)
 comment3.params=
-comment3.target=java.lang.String\ text()
-numComments=4
+comment3.target=long\ time()
+comment4.params=
+comment4.target=java.lang.String\ text()
+numComments=5

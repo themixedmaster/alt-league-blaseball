@@ -11,9 +11,9 @@ public class League
     public static Game[][] postseason3;
     public static ArrayList<Player> birdNest; /**the name of this array list is ILLEGAL KNOWLEDGE*/
     public static ArrayList<Player> deceased;
-    public static long seasonStartTime = System.currentTimeMillis();//1653318000 * (long)1000;// - 3600000 *114;
+    public static long seasonStartTime = 1653318000 * (long)1000;// - 3600000 *114;
     //public static long seasonStartTime = 1651503600 * (long)1000;// + 3600000 * (long)17;// - 60000 * (long)12;// - (long)(86400 * 1000 * 5) - (long)(3600 * 1000 * 22);
-    public static int season = Integer.MIN_VALUE;
+    public static int season;
     static Random r;
     public static void resetLeague(){
         recapSeason3();
@@ -237,15 +237,8 @@ public class League
         //System.out.println(games.length);
         for(int x = 0; x < games.length; x++){
             Game g = games[x][gameSet];
-            if(season > 2){
-                recordA += g.winsA;
-                recordB += g.winsB;
-            }else{
-                if(g.scoreA > g.scoreB)
-                    recordA++;
-                else
-                    recordB++;
-            }
+            recordA += g.winsA;
+            recordB += g.winsB;
         }
         if(recordA > recordB){
             return games[0][gameSet].teamA;
@@ -257,27 +250,6 @@ public class League
             return games[0][gameSet].teamA;
         }
         return games[0][gameSet].teamB;
-    }
-
-    public static long getSeasonStartTime(int season){
-        switch(season){
-            case 1:
-                return 1648479600 * (long)1000;
-            case 2:
-                return 1649084400 * (long)1000;
-            case 3:
-                return 1650294000 * (long)1000;
-            case 4:
-                return 1650898800 * (long)1000;
-            case -1:
-                return 1651503600 * (long)1000;
-            case -2:
-                return 1652108400 * (long)1000;
-            case -3:
-                return 1652713200 * (long)1000;
-            default:
-                return System.currentTimeMillis();
-        }
     }
 
     public static void scheduleSeason(){

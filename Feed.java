@@ -7,79 +7,244 @@ public class Feed
     public static void ViewFeed(){
         System.out.println("Welcome to the feed!");
         /*for(int x = 1; x <= League.season;x++){
-            System.out.println(x + "-Season " + x);
+        System.out.println(x + "-Season " + x);
         }
         System.out.println("3-Exit feed");
         viewSeason(console.nextInt());*/
+        League.resetLeague();
         viewSeason(League.season);
     }
 
     public static void viewSeason(int season){
-        if(season < 1 || season > League.season){
-            return;
-        }
-        System.out.println("Viewing season " + season);
-        System.out.println("0-View games");
-        System.out.println("1-View election results");
-        System.out.println("2-View teams");
         League.resetLeague();
+        League.runGamesUpToDate();
+        System.out.println("Viewing season " + season + " (past seasons will be viewable in a later update)");
+        System.out.println("0-View games");
+        //System.out.println("1-View election results");
+        //System.out.println("2-View teams");
+        System.out.println("1-View player statistics");
+        System.out.println("2-Exit feed");
         switch(console.nextInt()){
             case 0:
                 viewGames(season);
                 break;
             case 1:
+                viewPlayerStatistics(season);
+                break;
+            case 2:
+                return;
+        }
+        viewSeason(season);
+    }
+
+    static void viewPlayerStatistics(int season){
+        System.out.println("Which players would you like to view?");
+        System.out.println("0-All players");
+        System.out.println("1-All players of 1 team");
+        System.out.println("2-Single player");
+        ArrayList<Player> players;
+        switch(console.nextInt()){
+            case 1:
+                players = getPlayersOfTeam();
+                break;
+            case 2:
+                players = getSinglePlayer();
+                break;
+            default:
+                players = League.allPlayers();
+                break;
+        }
+        if(players.size() == 0){
+            System.out.println("No players found");
+            return;
+        }
+        System.out.println("Which statistics would you like to view?");
+        System.out.println("0-Regular player stats");
+        System.out.println("1-Advanced player stats");
+        System.out.println("2-Performance statistics");
+        switch(console.nextInt()){
+            case 0:
+                for(Player p : players){
+                    p.clearStatistics();
+                    p.addStatistic("Batting",p.batting);
+                    p.addStatistic("Pitching",p.pitching);
+                    p.addStatistic("Baserunning",p.baserunning);
+                    p.addStatistic("Defense",p.defense);
+                }
+                break;
+            case 1:
+                for(Player p : players){
+                    p.clearStatistics();
+                    p.addStatistic("Agression",p.aggression);
+                    p.addStatistic("Arrogance",p.arrogance);
+                    p.addStatistic("Carcinization",p.carcinization);
+                    p.addStatistic("Damage",p.damage);
+                    p.addStatistic("Density",p.density);
+                    p.addStatistic("Dexterity",p.dexterity);
+                    p.addStatistic("Dimensions",p.dimensions);
+                    p.addStatistic("Effort",p.effort);
+                    p.addStatistic("Focus",p.focus);
+                    p.addStatistic("Fun",p.fun);
+                    p.addStatistic("Grit",p.grit);
+                    p.addStatistic("Hit Points",p.hitPoints);
+                    p.addStatistic("Malleability",p.malleability);
+                    p.addStatistic("Mathematics",p.mathematics);
+                    p.addStatistic("Number of Eyes",p.numberOfEyes);
+                    p.addStatistic("Pinpointedness",p.pinpointedness);
+                    p.addStatistic("Powder",p.powder);
+                    p.addStatistic("Rejection",p.rejection);
+                    p.addStatistic("Splash",p.splash);
+                    p.addStatistic("Wisdom",p.wisdom);
+                }
                 break;
             case 2:
                 break;
         }
+        System.out.println("Choose your viewing method");
+        System.out.println("0-List by player (easier for looking at one player specifically)");
+        System.out.println("1-List by stat (easier for copy/pasting into spreadsheets)");
+        System.out.println("2-Comma delimited table (even easier to copy/paste than previous option)");
+        ArrayList<String> statsTracked = new ArrayList<String>();
+        switch(console.nextInt()){
+            case 1:
+                for(Player p : players){
+                    for(Map.Entry<String,Double> entry : p.statistics.entrySet()){
+                        if(!statsTracked.contains(entry.getKey()))
+                            statsTracked.add(entry.getKey());
+                    }
+                }
+                System.out.println("Player Name");
+                for(Player p : players)
+                    System.out.println(p.name);
+                System.out.println();
+                for(String s : statsTracked){
+                    System.out.println(s);
+                    for(Player p : players){
+                        double d = p.getStatistic(s);
+                        if(d % 1 != 0)
+                            System.out.println(d);
+                        else{
+                            System.out.println((int)d);
+                        }
+                    }
+                    System.out.println();
+                }
+                break;
+            case 2:
+                for(Player p : players){
+                    for(Map.Entry<String,Double> entry : p.statistics.entrySet()){
+                        if(!statsTracked.contains(entry.getKey()))
+                            statsTracked.add(entry.getKey());
+                    }
+                }
+                System.out.print("Player Name");
+                for(String s : statsTracked)
+                    System.out.print("," + s);
+                System.out.println();
+                for(Player p : players){
+                    System.out.print(p.name);
+                    for(String s : statsTracked){
+                        double d = p.getStatistic(s);
+                        if(d % 1 != 0)
+                            System.out.print("," + d);
+                        else{
+                            System.out.print("," + (int)d);
+                        }
+                    }
+                    System.out.println();
+                }
+                break;
+            case 0: default:
+                for(Player p : players){
+                    System.out.println(p.name);
+                    p.printStatistics();
+                }
+                break;
+        }
+    }
+
+    static ArrayList<Player> getPlayersOfTeam(){
+        System.out.println("Select a team:");
+        Team[] teams = League.getTeams();
+        for(int x = 0; x < teams.length; x++){
+            System.out.println(x + "-" + teams[x].logo + " " + teams[x].getTeamName());
+        }
+        Team team = teams[console.nextInt()];
+        ArrayList<Player> players = new ArrayList<Player>();
+        for(Player p : team.getActivePlayers()){
+            players.add(p);
+        }
+        return players;
+    }
+
+    static ArrayList<Player> getSinglePlayer(){
+        System.out.println("How would you like to select a player?");
+        System.out.println("0-Select player from list");
+        System.out.println("1-Type player name");
+        ArrayList<Player> singlePlayer = new ArrayList<Player>();
+        ArrayList<Player> players = League.allPlayers();
+        switch(console.nextInt()){
+            case 0:
+                for(int x = 0; x < players.size(); x++){
+                    System.out.println(x + "-" + players.get(x).name);
+                }
+                int i = console.nextInt();
+                if(i < players.size() & i >= 0)
+                    singlePlayer.add(players.get(i));
+                break;
+            case 1:
+                System.out.print("Type player name: ");
+                console = new Scanner(System.in);
+                String name = console.nextLine().toLowerCase();
+                for(Player p : players){
+                    if(name.equals(p.name.toLowerCase()))
+                        singlePlayer.add(p);
+                }
+                break;
+        }
+        return singlePlayer;
     }
 
     public static void viewGames(int season){
-        if(season < 1 || season > League.season){
-            return;
-        }
-        Game[][] games = League.getGames(season);
+        ArrayList<Game> games = filterByHasStarted(League.getAllGames());
         System.out.println("Which games do you want to view?");
         System.out.println("0-All games");
         System.out.println("1-Filter by game day");
         System.out.println("2-Filter by team");
         switch(console.nextInt()){
             case 0:
-                viewFilteredGames(filterByLive(filterAllGames(games)));
+                viewFilteredGames(games);
                 break;
             case 1:
-                viewFilteredGames(filterByLive(filterByDay(games)));
+                viewFilteredGames(filterByDay(games));
                 break;
             case 2:
-                viewFilteredGames(filterByLive(filterByTeam(games)));
+                viewFilteredGames(filterByTeam(games));
                 break;
         }
     }
-    
-    public static ArrayList<Game> filterAllGames(Game[][] games){
+
+    public static ArrayList<Game> filterByHasStarted(ArrayList<Game> games){
         ArrayList<Game> filteredList = new ArrayList<Game>();
-        for(int x = 0; x < games.length; x++){
-            for(int y = 0; y < games[x].length; y++){
-                filteredList.add(games[x][y]);
-            }
+        for(Game g : games){
+            if(g.startTime <= System.currentTimeMillis())
+                filteredList.add(g);
         }
         return filteredList;
     }
 
-    public static ArrayList<Game> filterByDay(Game[][] games){
+    public static ArrayList<Game> filterByDay(ArrayList<Game> games){
         System.out.println("Which game day would you like to view?");
         int day = console.nextInt();
         ArrayList<Game> filteredList = new ArrayList<Game>();
-        for(int x = 0; x < games.length; x++){
-            for(int y = 0; y < games[x].length; y++){
-                if(games[x][y].dayNum == day)
-                    filteredList.add(games[x][y]);
-            }
+        for(Game g : games){
+            if(g.dayNum == day)
+                filteredList.add(g);            
         }
         return filteredList;
     }
 
-    public static ArrayList<Game> filterByTeam(Game[][] games){
+    public static ArrayList<Game> filterByTeam(ArrayList<Game> games){
         System.out.println("Which team would you like to view?");
         Team[] teams = League.getTeams();
         for(int x = 0; x < teams.length; x++){
@@ -87,24 +252,13 @@ public class Feed
         }
         Team team = teams[console.nextInt()];
         ArrayList<Game> filteredList = new ArrayList<Game>();
-        for(int x = 0; x < games.length; x++){
-            for(int y = 0; y < games[x].length; y++){
-                if(games[x][y].teamA.equals(team) || games[x][y].teamB.equals(team))
-                    filteredList.add(games[x][y]);
-            }
+        for(Game g : games){
+            if(g.teamA.equals(team) || g.teamB.equals(team))
+                filteredList.add(g);
         }
         return filteredList;
     }
 
-    public static ArrayList<Game> filterByLive(ArrayList<Game> games){
-        ArrayList<Game> filteredList = new ArrayList<Game>();
-        for(Game game : games){
-            if(game.isLive())
-                filteredList.add(game);
-        }
-        return filteredList;
-    }
-    
     public static void viewFilteredGames(ArrayList<Game> games){
         System.out.println("Would you like to see logs or results?");
         System.out.println("0-View game results");
@@ -113,7 +267,7 @@ public class Feed
             case 0:
                 for(int x = 0; x < games.size(); x++){
                     Game game = games.get(x);
-                    System.out.print("Day " + game.dayNum + ", " + game.gameName());
+                    System.out.print(game.gameName());
                     if(game.isLive())
                         System.out.println(" (LIVE)");
                     else
@@ -124,27 +278,23 @@ public class Feed
                 System.out.println("Please select a game to watch:");
                 for(int x = 0; x < games.size(); x++){
                     Game game = games.get(x);
-                    System.out.println(x + "-Day " + game.dayNum + ", " + game.gameName());
+                    System.out.println(x + "-" + game.gameName());
                 }
                 watchGame(games.get(console.nextInt()));
                 break;
         }
     }
-    
+
     public static void watchGame(Game game){
-            System.out.println("How do you want to view the game?");
-            System.out.println("0-Show log");
-            System.out.println("1-Rewatch game");
-            switch(console.nextInt()){
-                case 0:
-                    //game.watch();
-                    //game.runGame();
-                    break;
-                case 1:
-                    game.startTime = System.currentTimeMillis();
-                    //game.watch();
-                    //game.runGame();
-                    break;
-            }
+        System.out.println("How do you want to view the game?");
+        System.out.println("0-Show log");
+        System.out.println("1-Rewatch game");
+        switch(console.nextInt()){
+            case 1:
+                game.setStartTime(System.currentTimeMillis());
+            case 0:
+                game.playLog();
+                break;
+        }
     }
 }

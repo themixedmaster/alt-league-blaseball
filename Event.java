@@ -7,6 +7,10 @@ public class Event
         this.time = time;
     }
     
+    public void setTime(long time){
+        this.time = time;
+    }
+    
     public long time(){
         return time;
     }

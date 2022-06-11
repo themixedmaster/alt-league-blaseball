@@ -34,8 +34,12 @@ public class Game //name will be changed to Game when finished and replace curre
     int balls = 0;
     int strikes = 0;
     int outs = 0;
+    boolean out = false;
     int activeTeamBat = 0;
     int inactiveTeamBat = 0;
+
+    boolean teamAScored = false;
+    boolean teamBScored = false;
 
     Player[] bases;
 
@@ -60,11 +64,20 @@ public class Game //name will be changed to Game when finished and replace curre
 
         pitcherA = teamA.rotation[(dayNum - 1 + teamA.rotation.length) % teamA.rotation.length];
         pitcherB = teamB.rotation[(dayNum - 1 + teamB.rotation.length) % teamB.rotation.length];
-        
+
         pitchingTeam = teamA;
         battingTeam = teamB;
         pitcher = pitcherA;
         waitingPitcher = pitcherB;
+
+        for(Player p : teamA.lineup){
+            p.addStatistic("Games played");
+        }
+        for(Player p : teamB.lineup){
+            p.addStatistic("Games played");
+        }
+        pitcherA.addStatistic("Games played");
+        pitcherB.addStatistic("Games played");
 
         addEvent("Blay pall!",tick);
         beforeFirstInning();
@@ -75,6 +88,7 @@ public class Game //name will be changed to Game when finished and replace curre
             else
                 s = "Bottom";
             addEvent(s + " of " + inning + ", " + battingTeam.getTeamName() + " batting. " + pitcher.name + " pitching.",tick);
+            pitcher.addStatistic("Innings pitched");
             while(!endOfInning()){
                 clearBases();
                 setNextBatter();
@@ -82,8 +96,11 @@ public class Game //name will be changed to Game when finished and replace curre
                     doSteals();
                     doPitch();
                 }
+                if(!out)
+                    pitcher.addStatistic("Strikeouts");
                 strikes = 0;
                 balls = 0;
+                out = false;
                 outs++;
                 addEvent("[Out " + outs + "]",0);
             }
@@ -112,12 +129,16 @@ public class Game //name will be changed to Game when finished and replace curre
         addEvent(teamA.getName() + " " + scoreToString(scoreA) + ", " + teamB.getName() + " " + scoreToString(scoreB),tick);
         addEvent("\nGame over.",tick);
         giveWins();
+        if(!teamAScored)
+            pitcherB.addStatistic("Shutouts");
+        if(!teamBScored)
+            pitcherA.addStatistic("Shutouts");
     }
 
     void beforeFirstInning(){
         //nothing in here for now, maybe there will be later, idk
     }
-    
+
     //precondition: simulateGame() has been called already
     public String gameName(){
         return weather.name() + ", " + teamA.getTeamName() + " vs. " + teamB.getTeamName() + ", Day " + dayNum;
@@ -143,6 +164,7 @@ public class Game //name will be changed to Game when finished and replace curre
             if(gameEffectsRecord()){
                 teamA.addWin();
                 teamB.lose();
+                pitcherA.addStatistic("Pitcher wins");
             }
         }else{
             winningTeam = teamB;
@@ -151,6 +173,7 @@ public class Game //name will be changed to Game when finished and replace curre
             if(gameEffectsRecord()){
                 teamB.addWin();
                 teamA.lose();
+                pitcherB.addStatistic("Pitcher wins");
             }
         }
         if(gameEffectsRecord()){
@@ -164,18 +187,23 @@ public class Game //name will be changed to Game when finished and replace curre
         double urge = r.nextDouble() * 10 + bases[baseNum].arrogance - defender.rejection;
         if(urge < 9.9)
             return;
+        bases[baseNum].addStatistic("Base steal attempts");
         double stealValue = r.nextDouble() * 10 + bases[baseNum].dexterity;
         double defenseValue = r.nextDouble() * 10 + defender.wisdom;
         if(stealValue > defenseValue){
+            bases[baseNum].addStatistic("Bases stolen");
             switch(baseNum){
                 case 0:
                     addEvent(bases[baseNum].name + " steals second base!",tick);
+                    bases[baseNum].addStatistic("Second base stolen");
                     break;
                 case 1:
                     addEvent(bases[baseNum].name + " steals third base!",tick);
+                    bases[baseNum].addStatistic("Third base stolen");
                     break;
                 default:
                     addEvent(bases[baseNum].name + " steals home!",tick);
+                    bases[baseNum].addStatistic("Home stolen");
                     break;
             }
             score(bases[baseNum]);
@@ -183,18 +211,22 @@ public class Game //name will be changed to Game when finished and replace curre
                 bases[baseNum+1] = bases[baseNum];
             bases[baseNum] = null;
         }else{
+            bases[baseNum].addStatistic("Caught stealing");
             switch(baseNum){
                 case 0:
                     addEvent(bases[baseNum].name + " gets caught stealing second base.",tick);
+                    bases[baseNum].addStatistic("Caught stealing second base");
                     break;
                 case 1:
                     addEvent(bases[baseNum].name + " gets caught stealing third base.",tick);
+                    bases[baseNum].addStatistic("Caught stealing third base");
                     break;
                 default:
                     addEvent(bases[baseNum].name + " gets caught stealing home.",tick);
+                    bases[baseNum].addStatistic("Caught stealing home");
                     break;
             }
-            strikes+=100;
+            out = true;
             bases[baseNum] = null;
         }
         doSteals();
@@ -219,9 +251,13 @@ public class Game //name will be changed to Game when finished and replace curre
     void doPitch(){
         double pitchValue = r.nextDouble() * 10 + pitcher.pinpointedness;
         double batValue = r.nextDouble() * 10 + batter.density;
-        if(batValue <= pitchValue)
+        pitcher.addStatistic("Pitches thrown");
+        batter.addStatistic("Times pitched to");
+        if(batValue <= pitchValue){
+            pitcher.addStatistic("Balls thrown");
+            pitcher.addStatistic("Balls received");
             ball();
-        else{
+        }else{
             pitchValue = r.nextDouble() * 10 + pitcher.fun;
             batValue = r.nextDouble() * 10 + batter.numberOfEyes;
             if(batValue <= pitchValue){
@@ -229,6 +265,8 @@ public class Game //name will be changed to Game when finished and replace curre
                 batValue = r.nextDouble() * 10 + batter.focus;
                 if(batValue <= pitchValue){
                     strikes++;
+                    batter.addStatistic("Strikes");
+                    batter.addStatistic("Looking strikes");
                     if(strikeout())
                         addEvent(batter.name + " strikes out looking.",tick);
                     else
@@ -238,6 +276,8 @@ public class Game //name will be changed to Game when finished and replace curre
                     batValue = r.nextDouble() * 10 + batter.malleability;
                     if(batValue <= pitchValue){
                         strikes++;
+                        batter.addStatistic("Strikes");
+                        batter.addStatistic("Swinging strikes");
                         if(strikeout())
                             addEvent(batter.name + " strikes out swinging.",tick);
                         else
@@ -250,22 +290,33 @@ public class Game //name will be changed to Game when finished and replace curre
                 batValue = r.nextDouble() * 10 + batter.splash;
                 if(batValue <= pitchValue){
                     strikes++;
-                    while(strikeout())
+                    batter.addStatistic("Strikes");
+                    while(strikeout()){
                         strikes--;
+                        batter.addStatistic("Strikes",-1);
+                    }
                     addEvent("Foul ball. " + bs(),tick);
+                    batter.addStatistic("Foul balls hit");
+                    pitcher.addStatistic("Foul balls pitched");
                 }else{
+                    batter.addStatistic("Hits");
+                    pitcher.addStatistic("Hits allowed");
                     defender = randomDefender();
                     batValue = r.nextDouble() * 10 + batter.aggression;
                     double defenseValue = r.nextDouble() * 10 + defender.mathematics;
                     if(batValue <= defenseValue){
-                        strikes+=100;
+                        out = true;
                         addEvent(batter.name + " hit a flyout to " + defender.name + ".",tick);
+                        batter.addStatistic("Flyouts hit");
+                        defender.addStatistic("Flyouts caught");
                     }else{
                         batValue = r.nextDouble() * 10 + batter.hitPoints;
                         defenseValue = r.nextDouble() * 10 + defender.damage;
                         if(batValue <= defenseValue){
-                            strikes+=100;
+                            out = true;
                             addEvent(batter.name + " hit a ground out to " + defender.name + ".",tick);
+                            batter.addStatistic("Ground outs hit");
+                            defender.addStatistic("Ground outs fielded");
                         }else{
                             int basesRun = 0;
                             do{
@@ -276,15 +327,23 @@ public class Game //name will be changed to Game when finished and replace curre
                             switch(basesRun){
                                 case 1:
                                     addEvent(batter.name + " hits a Single!",tick);
+                                    batter.addStatistic("Singles hit");
+                                    pitcher.addStatistic("Singles allowed");
                                     break;
                                 case 2:
                                     addEvent(batter.name + " hits a Double!",tick);
+                                    batter.addStatistic("Doubles hit");
+                                    pitcher.addStatistic("Singles allowed");
                                     break;
                                 case 3:
                                     addEvent(batter.name + " hits a Triple!",tick);
+                                    batter.addStatistic("Triples hit");
+                                    pitcher.addStatistic("Singles allowed");
                                     break;
                                 default:
                                     addEvent(batter.name + " hits a Home run!",tick);
+                                    batter.addStatistic("Home runs hit");
+                                    pitcher.addStatistic("Singles allowed");
                                     break;
                             }
                             advanceBaserunners(basesRun);
@@ -321,7 +380,7 @@ public class Game //name will be changed to Game when finished and replace curre
     }
 
     boolean strikeout(){
-        return strikes >= 3;
+        return strikes >= 3 || out;
     }
 
     String bs(){ //balls strikes
@@ -342,6 +401,8 @@ public class Game //name will be changed to Game when finished and replace curre
         balls++;
         if(balls >= 4){
             addEvent(batter.name + " draws a walk.",tick);
+            batter.addStatistic("Walks");
+            pitcher.addStatistic("Walks allowed");
             walk();
             setNextBatter();
         }else
@@ -386,11 +447,16 @@ public class Game //name will be changed to Game when finished and replace curre
     }
 
     void score(Player p){
-        if(top)
+        if(top){
             scoreB++;
-        else
+            teamBScored = true;
+        }else{
             scoreA++;
+            teamAScored = true;
+        }
         addEvent(p.name + " scores!",0);
+        p.addStatistic("Runs scored");
+        pitcher.addStatistic("Runs allowed");
     }
 
     boolean endOfGame(){
@@ -400,7 +466,7 @@ public class Game //name will be changed to Game when finished and replace curre
     boolean endOfInning(){
         return outs >= 3;
     }
-    
+
     //sets the next batter unless the inning is about to end
     void setNextBatter(){
         if(endOfInning())
@@ -412,13 +478,21 @@ public class Game //name will be changed to Game when finished and replace curre
             batter = battingTeam.lineup[(activeTeamBat-1) % battingTeam.lineup.length];
         }while(batter.elsewhere);
         addEvent(batter.name + " batting for the " + battingTeam.getName(),tick);
+        batter.addStatistic("Plate appearences");
     }
 
     void addEvent(String s, int tick){
         events.add(new Event(s,currentTime));
         currentTime+=tick;
     }
-    
+    //precondition: at least 1 event in events
+    public void setStartTime(long startTime){
+        long shift = startTime - events.get(0).time;
+        for(Event e : events){
+            e.setTime(e.time() + shift);
+        }
+    }
+
     public void playLog(){
         for(int x = 0; x < events.size(); x++){
             while(System.currentTimeMillis() < events.get(x).time());
