@@ -53,7 +53,7 @@ public class Game //name will be changed to Game when finished and replace curre
     }
     //code is currently in testing phase
     public void simulateGame(){
-        r = new Random(dayNum *  + (long)Math.pow(teamA.favor,teamB.favor) + (long)Math.pow(teamB.favor,teamA.favor));
+        r = new Random(dayNum * (long)Math.pow(teamA.favor,teamB.favor) + (long)Math.pow(teamB.favor,teamA.favor));
         setRandomWeather();
         addEvent(teamA.getTeamName() + " vs. " + teamB.getTeamName(),0);
 
@@ -94,6 +94,7 @@ public class Game //name will be changed to Game when finished and replace curre
                 setNextBatter();
                 while(!strikeout()){
                     doSteals();
+                    weather.beforePitch();
                     doPitch();
                 }
                 if(!out)
@@ -379,6 +380,33 @@ public class Game //name will be changed to Game when finished and replace curre
         return players[(int)(r.nextDouble() * players.length)];
     }
 
+    int randomOccupiedBase(){
+        if(basesEmpty())
+            return -1;
+        int pick;
+        do{
+            pick = (int)(r.nextDouble() * bases.length);
+        }while(bases[pick] == null);
+        return pick;
+    }
+    
+    Player randomBaserunner(){
+        if(basesEmpty())
+            return null;
+        Player pick = null;
+        do{
+            pick = bases[(int)(r.nextDouble() * bases.length)];
+        }while(pick == null);
+        return pick;
+    }
+    
+    boolean basesEmpty(){
+        for(int x = 0; x < bases.length; x++)
+            if(bases[x] != null)
+                return false;
+        return true;
+    }
+    
     boolean strikeout(){
         return strikes >= 3 || out;
     }
@@ -481,8 +509,21 @@ public class Game //name will be changed to Game when finished and replace curre
         batter.addStatistic("Plate appearences");
     }
 
+    void addEvent(String s){
+        addEvent(s,tick);
+    }
+    
+    void addEvent(String s, boolean special){
+        addEvent(s,tick,special);
+    }
+    
     void addEvent(String s, int tick){
         events.add(new Event(s,currentTime));
+        currentTime+=tick;
+    }
+    
+    void addEvent(String s, int tick, boolean special){
+        events.add(new Event(s,currentTime,special));
         currentTime+=tick;
     }
     //precondition: at least 1 event in events
@@ -501,7 +542,7 @@ public class Game //name will be changed to Game when finished and replace curre
     }
 
     void setRandomWeather(){
-        weather = new Weather(this);
+        weather = new SolarEclipse(this);
     }
 
 }

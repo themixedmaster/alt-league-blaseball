@@ -62,6 +62,7 @@ public class Feed
         System.out.println("0-Regular player stats");
         System.out.println("1-Advanced player stats");
         System.out.println("2-Performance statistics");
+        System.out.println("3-everything");
         switch(console.nextInt()){
             case 0:
                 for(Player p : players){
@@ -97,7 +98,33 @@ public class Feed
                     p.addStatistic("Wisdom",p.wisdom);
                 }
                 break;
-            case 2:
+            case 3:
+                for(Player p : players){
+                    p.addStatistic("Batting",p.batting);
+                    p.addStatistic("Pitching",p.pitching);
+                    p.addStatistic("Baserunning",p.baserunning);
+                    p.addStatistic("Defense",p.defense);
+                    p.addStatistic("Agression",p.aggression);
+                    p.addStatistic("Arrogance",p.arrogance);
+                    p.addStatistic("Carcinization",p.carcinization);
+                    p.addStatistic("Damage",p.damage);
+                    p.addStatistic("Density",p.density);
+                    p.addStatistic("Dexterity",p.dexterity);
+                    p.addStatistic("Dimensions",p.dimensions);
+                    p.addStatistic("Effort",p.effort);
+                    p.addStatistic("Focus",p.focus);
+                    p.addStatistic("Fun",p.fun);
+                    p.addStatistic("Grit",p.grit);
+                    p.addStatistic("Hit Points",p.hitPoints);
+                    p.addStatistic("Malleability",p.malleability);
+                    p.addStatistic("Mathematics",p.mathematics);
+                    p.addStatistic("Number of Eyes",p.numberOfEyes);
+                    p.addStatistic("Pinpointedness",p.pinpointedness);
+                    p.addStatistic("Powder",p.powder);
+                    p.addStatistic("Rejection",p.rejection);
+                    p.addStatistic("Splash",p.splash);
+                    p.addStatistic("Wisdom",p.wisdom);
+                }
                 break;
         }
         System.out.println("Choose your viewing method");
@@ -207,10 +234,15 @@ public class Feed
 
     public static void viewGames(int season){
         ArrayList<Game> games = filterByHasStarted(League.getAllGames());
+        filterGames(games);
+    }
+    
+    static void filterGames(ArrayList<Game> games){
         System.out.println("Which games do you want to view?");
         System.out.println("0-All games");
         System.out.println("1-Filter by game day");
         System.out.println("2-Filter by team");
+        System.out.println("3-Filter by special event");
         switch(console.nextInt()){
             case 0:
                 viewFilteredGames(games);
@@ -220,6 +252,9 @@ public class Feed
                 break;
             case 2:
                 viewFilteredGames(filterByTeam(games));
+                break;
+            case 3:
+                viewFilteredGames(filterBySpecial(games));
                 break;
         }
     }
@@ -233,6 +268,19 @@ public class Feed
         return filteredList;
     }
 
+    public static ArrayList<Game> filterBySpecial(ArrayList<Game> games){
+        ArrayList<Game> filteredList = new ArrayList<Game>();
+        for(Game g : games){
+            boolean special = false;
+            for(Event e : g.events)
+                if(e.isSpecial() && e.time <= System.currentTimeMillis())
+                    special = true;
+            if(special)
+                filteredList.add(g);
+        }
+        return filteredList;
+    }
+    
     public static ArrayList<Game> filterByDay(ArrayList<Game> games){
         System.out.println("Which game day would you like to view?");
         int day = console.nextInt();
@@ -260,9 +308,14 @@ public class Feed
     }
 
     public static void viewFilteredGames(ArrayList<Game> games){
+        if(games.size() == 0 || games == null){
+            System.out.println("No games found.");
+            return;
+        }
         System.out.println("Would you like to see logs or results?");
         System.out.println("0-View game results");
         System.out.println("1-View game logs");
+        System.out.println("2-Add another filter");
         switch(console.nextInt()){
             case 0:
                 for(int x = 0; x < games.size(); x++){
@@ -271,7 +324,7 @@ public class Feed
                     if(game.isLive())
                         System.out.println(" (LIVE)");
                     else
-                        System.out.println(" " + game.scoreToString(game.scoreA) + "-" + game.scoreToString(game.scoreB));
+                        System.out.println(" (" + game.scoreToString(game.scoreA) + "-" + game.scoreToString(game.scoreB) + ")");
                 }
                 break;
             case 1:
@@ -281,6 +334,9 @@ public class Feed
                     System.out.println(x + "-" + game.gameName());
                 }
                 watchGame(games.get(console.nextInt()));
+                break;
+            case 2:
+                filterGames(games);
                 break;
         }
     }

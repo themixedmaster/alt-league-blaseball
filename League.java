@@ -9,21 +9,30 @@ public class League
     public static Game[][] postseason1;
     public static Game[][] postseason2;
     public static Game[][] postseason3;
+    static ArrayList<Game> allGames;
     public static ArrayList<Player> birdNest; /**the name of this array list is ILLEGAL KNOWLEDGE*/
     public static ArrayList<Player> deceased;
     public static long seasonStartTime = 1653318000 * (long)1000;// - 3600000 *114;
     //public static long seasonStartTime = 1651503600 * (long)1000;// + 3600000 * (long)17;// - 60000 * (long)12;// - (long)(86400 * 1000 * 5) - (long)(3600 * 1000 * 22);
     public static int season;
+    public static int nextID;
     static Random r;
     public static void resetLeague(){
         recapSeason3();
         r = new Random(-4);
         season = -4;
         scheduleSeason(seasonStartTime);
+        nextID = 0;
         //Player[] god = new Player[1];
         //god[0] = new Player("God",10,10,10,10);
     }
 
+    public static int nextID(){
+        int i = nextID;
+        nextID++;
+        return i;
+    }
+    
     public static void runPostseason(){
         runPostseason(getGameDay());
     }
@@ -45,66 +54,44 @@ public class League
     }
 
     public static ArrayList<Game> getAllGames(){
-        int day = getGameDay();
-        ArrayList<Game> allGames = new ArrayList<Game>();
-        for(Game[] games : seasonGames){
-            for(Game game : games){
-                allGames.add(game);
-            }
-        }
-        if(day >= 100){
-            schedulePostseason1();
-            for(Game[] games : postseason1){
-                for(Game game : games){
-                    allGames.add(game);
-                }
-            }
-        }
-        if(day >= 105){
-            schedulePostseason2();
-            for(Game[] games : postseason2){
-                for(Game game : games){
-                    allGames.add(game);
-                }
-            }
-        }
-        if(day >= 110){
-            schedulePostseason3();
-            for(Game[] games : postseason3){
-                for(Game game : games){
-                    allGames.add(game);
-                }
-            }
-        }
         return allGames;
     }
 
     public static void runGamesUpToDate(){
+        allGames = new ArrayList<Game>();
         int day = getGameDay();
         for(Game[] games : seasonGames)
             for(Game game : games)
-                if(game.dayNum < day)
+                if(game.dayNum < day){
                     game.simulateGame();
+                    allGames.add(game);
+                }
         if(day >= 100){
             schedulePostseason1();
             for(Game[] games : postseason1)
                 for(Game game : games)
-                    if(game.dayNum < day)
+                    if(game.dayNum < day){
                         game.simulateGame();
-        }
-        if(day >= 105){
-            schedulePostseason2();
-            for(Game[] games : postseason2)
-                for(Game game : games)
-                    if(game.dayNum < day)
-                        game.simulateGame();
-        }
-        if(day >= 110){
-            schedulePostseason3();
-            for(Game[] games : postseason3)
-                for(Game game : games)
-                    if(game.dayNum < day)
-                        game.simulateGame();
+                        allGames.add(game);
+                    }
+            if(day >= 105){
+                schedulePostseason2();
+                for(Game[] games : postseason2)
+                    for(Game game : games)
+                        if(game.dayNum < day){
+                            game.simulateGame();
+                            allGames.add(game);
+                        }
+            }
+            if(day >= 110){
+                schedulePostseason3();
+                for(Game[] games : postseason3)
+                    for(Game game : games)
+                        if(game.dayNum < day){
+                            game.simulateGame();
+                            allGames.add(game);
+                        }
+            }
         }
     }
 
@@ -186,7 +173,7 @@ public class League
     public static Team getChampion(){
         return getRoundWinner(League.postseason3, 0);
     }
-    
+
     public static void printPostseason(){
         System.out.println("Season " + season + " Postseason\n");
         if(getGameDay() < 100){

@@ -4,11 +4,11 @@ public class GameTester
 {
     public static void main(String[] args){
         Scanner console = new Scanner(System.in);
-        System.out.print("Welcome to Alt(Alt) League Blaseball(alpha)! ");
+        System.out.print("Welcome to Alt(Alt) League Blaseball! ");
         int selection = 0;
         do{
             System.out.println("Where would you like to go? ");
-            System.out.println("0-Games\n1-Standings\n2-Election\n3-Feed(Beta)\n4-Exit");
+            System.out.println("0-Games\n1-Standings\n2-Election\n3-Feed (Beta)\n4-Exit");
             selection = console.nextInt();
             switch(selection){
                 case 0:

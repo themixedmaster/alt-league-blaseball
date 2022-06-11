@@ -93,8 +93,15 @@ public class Player
         this.fate = fate;
         this.soulscream = soulscream;
         statistics = new HashMap<String,Double>();
+        
+        PlayerMaker.addFlavor(this);
+        id = League.nextID();
     }
 
+    public boolean equals(Player p){
+        return id == p.id;
+    }
+    
     public void clearStatistics(){
         statistics = new HashMap<String,Double>();
     }

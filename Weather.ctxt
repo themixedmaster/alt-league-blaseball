@@ -4,4 +4,6 @@ comment1.params=game
 comment1.target=Weather(Game)
 comment2.params=
 comment2.target=java.lang.String\ name()
-numComments=3
+comment3.params=
+comment3.target=void\ beforePitch()
+numComments=4

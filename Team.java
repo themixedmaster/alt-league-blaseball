@@ -79,6 +79,22 @@ public class Team
         return players;
     }
     
+    public int getPositionInLineup(Player p){
+        for(int x = 0; x < lineup.length; x++){
+            if(lineup[x].equals(p))
+                return x;
+        }
+        return -1;
+    }
+    
+    public int getPositionInRotation(Player p){
+        for(int x = 0; x < rotation.length; x++){
+            if(rotation[x].equals(p))
+                return x;
+        }
+        return -1;
+    }
+    
     public String getWins(){
         String w = "" + wins;
         if(wins < 0)
