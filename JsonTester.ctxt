@@ -1,9 +1,0 @@
-#BlueJ class context
-comment0.target=JsonTester
-comment1.params=args
-comment1.target=void\ main(java.lang.String[])
-comment2.params=season
-comment2.target=void\ createJson(int)
-comment3.params=
-comment3.target=void\ createJson1()
-numComments=4
