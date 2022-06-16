@@ -17,11 +17,19 @@ public class Weather
         
     }
     
+    public void beforeFullInning(){
+        
+    }
+    
     public void beforeHalfInning(){
         
     }
     
     public void beforePitch(){
+        
+    }
+    
+    public void afterBall(){
         
     }
     

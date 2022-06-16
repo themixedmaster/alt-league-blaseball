@@ -55,7 +55,7 @@ public class Game //name will be changed to Game when finished and replace curre
     //code is currently in testing phase
     public void simulateGame(){
         r = new Random(dayNum * (long)Math.pow(teamA.favor,teamB.favor) + (long)Math.pow(teamB.favor,teamA.favor));
-        setRandomWeather();
+        weather = randomWeather();
         addEvent(teamA.getTeamName() + " vs. " + teamB.getTeamName(),0);
 
         inning = 1;
@@ -83,6 +83,8 @@ public class Game //name will be changed to Game when finished and replace curre
         weather.startOfGame();
         addEvent("Blay pall!",tick);
         while(!endOfGame()){
+            if(top)
+                weather.beforeFullInning();
             weather.beforeHalfInning();
             String s;
             if(top)
@@ -291,13 +293,14 @@ public class Game //name will be changed to Game when finished and replace curre
 
     void doPitch(){
         double pitchValue = r.nextDouble() * 10 + pitcher.pinpointedness.value();
-        double batValue = r.nextDouble() * 10 + batter.density.value();
+        double batValue = r.nextDouble() * 7 + batter.density.value();
         pitcher.addStatistic("Pitches thrown");
         batter.addStatistic("Times pitched to");
-        if(batValue <= pitchValue){
+        if(batValue > pitchValue){
             pitcher.addStatistic("Balls thrown");
             pitcher.addStatistic("Balls received");
             ball();
+            weather.afterBall();
         }else{
             pitchValue = r.nextDouble() * 10 + pitcher.fun.value();
             batValue = r.nextDouble() * 10 + batter.numberOfEyes.value();
@@ -340,8 +343,6 @@ public class Game //name will be changed to Game when finished and replace curre
                     batter.addStatistic("Foul balls hit");
                     pitcher.addStatistic("Foul balls pitched");
                 }else{
-                    batter.addStatistic("Hits");
-                    pitcher.addStatistic("Hits allowed");
                     defender = randomDefender();
                     batValue = r.nextDouble() * 10 + batter.aggression.value();
                     double defenseValue = r.nextDouble() * 10 + defender.mathematics.value();
@@ -579,6 +580,8 @@ public class Game //name will be changed to Game when finished and replace curre
     void addEvent(String s, int tick){
         events.add(new Event(s,currentTime));
         currentTime+=tick;
+        if(currentTime > startTime + 3600000)
+            System.out.println(s);
     }
 
     void addEvent(String s, int tick, boolean special){
@@ -600,16 +603,21 @@ public class Game //name will be changed to Game when finished and replace curre
         }
     }
 
-    void setRandomWeather(){
-        int rand = (int)(r.nextDouble() * 1);
+    Weather randomWeather(){
+        int rand = (int)(r.nextDouble() * 2);
         switch(rand){
             case 0:
-                weather = new SolarEclipse(this);
-                break;
-                //case 1:
-                //    weather = new Meownsoon(this);
-                //    break;
+                return new SolarEclipse(this);
+            case 1:
+                return new Meownsoon(this);
+            case 2:
+                return new PulsarPulsar(this);
+            case 3:
+                return new SnailMail(this);
+            case 4:
+                return new Crabs(this);
         }
+        return new Weather(this);
     }
 
 }

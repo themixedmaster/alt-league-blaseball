@@ -290,6 +290,7 @@ public class Player
     public void printPlayer(int mode){
         System.out.println(name);
         printMods();
+        System.out.println("Elsewhere: " + elsewhere);
         printStats();
         System.out.println("Pregame Ritual  " + pregameRitual);
         System.out.println("Coffee Style    " + coffeeStyle);
@@ -302,8 +303,11 @@ public class Player
     }
 
     public void printMods(){
+        if(mods.size() > 0){
+            System.out.println("Mods:");
+        }
         for(String s : mods){
-            System.out.println(s + " - " + modDescription(s));
+            System.out.println("  " + s + " - " + modDescription(s));
         }
     }
     

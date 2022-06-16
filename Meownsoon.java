@@ -1,5 +1,5 @@
 //will be fully implemented next season
-//incomplete atm, causes infinite innings, idk why, probably stats
+//elsewhere result is disabled becaue of infinite inning issues
 public class Meownsoon extends Weather
 {
     String nameA;
@@ -98,12 +98,12 @@ public class Meownsoon extends Weather
                 random = (int)(r.nextDouble() * 5);
                 switch(random){
                     case 0:
-                        game.addEvent(p.name + " leaps into the stands and steals a fan's sunflower seeds! Their pitching improves slightly.");
+                        game.addEvent(p.name + " leaps into the stands and steals a fan's sunflower seeds! Their batting improves slightly.");
                         p.addStatistic("Food eaten");
                         p.boostBatting(0.5);
                         break;
                     case 1:
-                        game.addEvent(p.name + " leaps into the stands and steals a fan's hot dog! Their pitching improves drastically.");
+                        game.addEvent(p.name + " leaps into the stands and steals a fan's hot dog! Their batting improves drastically.");
                         p.addStatistic("Food eaten");
                         p.boostBatting(1.5);
                         break;
@@ -185,6 +185,7 @@ public class Meownsoon extends Weather
         game.teamB.name = nameB;
         for(Player p : game.activePlayers()){
             p.removeMod("Cat");
+            p.elsewhere = false;
         }
     }
 }

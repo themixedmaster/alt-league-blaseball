@@ -4,7 +4,7 @@ public class SolarEclipse extends Weather
 {
     public SolarEclipse(Game game){
         super(game);
-        name = "Solar Eclpise";
+        name = "Solar Eclipse";
     }
 
     public void beforePitch(){
@@ -42,7 +42,6 @@ public class SolarEclipse extends Weather
                 p.originalTeam = game.battingTeam;
                 game.bases[i] = replacement;//optional: set to null
                 game.battingTeam.lineup[game.battingTeam.getPositionInLineup(p)] = replacement;
-                p = new Player();
                 break;
         }
         League.deceased.add(p);

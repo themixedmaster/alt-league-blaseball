@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Crabs
+comment1.params=game
+comment1.target=Crabs(Game)
+comment2.params=
+comment2.target=void\ beforeFullInning()
+comment3.params=
+comment3.target=void\ afterBall()
+numComments=4
