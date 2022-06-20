@@ -1,5 +1,6 @@
 #BlueJ package file
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 dependency1.from=Player
 dependency1.to=Team
 dependency1.type=UsesDependency
@@ -67,6 +68,12 @@ dependency1.from=JsonTester
 dependency1.to=Team
 dependency1.type=UsesDependency
 dependency10.from=Blessings
+=======
+dependency1.from=JsonTester
+dependency1.to=Team
+dependency1.type=UsesDependency
+dependency10.from=Blessings
+>>>>>>> Stashed changes
 dependency10.to=Player
 dependency10.type=UsesDependency
 dependency11.from=Blessings
@@ -125,11 +132,15 @@ dependency27.to=Event
 dependency27.type=UsesDependency
 dependency28.from=Feed
 dependency28.to=League
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 dependency28.type=UsesDependency
 dependency29.from=League
 dependency29.to=Game
 dependency29.type=UsesDependency
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 dependency3.from=Player
 dependency3.to=League
@@ -190,6 +201,20 @@ dependency31.type=UsesDependency
 dependency32.from=League
 dependency32.to=Blessings
 dependency32.type=UsesDependency
+=======
+dependency3.from=JsonTester
+dependency3.to=League
+dependency3.type=UsesDependency
+dependency30.from=League
+dependency30.to=Player
+dependency30.type=UsesDependency
+dependency31.from=League
+dependency31.to=Team
+dependency31.type=UsesDependency
+dependency32.from=League
+dependency32.to=Blessings
+dependency32.type=UsesDependency
+>>>>>>> Stashed changes
 dependency33.from=League
 dependency33.to=PlayerMaker
 dependency33.type=UsesDependency
@@ -341,6 +366,9 @@ package.frame.height=1087
 package.frame.width=890
 package.numDependencies=71
 package.numTargets=30
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 package.showExtends=true
 package.showUses=true
@@ -356,8 +384,13 @@ target1.showInterface=false
 target1.type=ClassTarget
 target1.width=120
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target1.x=480
 target1.y=60
+=======
+target1.x=240
+target1.y=420
+>>>>>>> Stashed changes
 =======
 target1.x=240
 target1.y=420
@@ -368,8 +401,13 @@ target10.showInterface=false
 target10.type=ClassTarget
 target10.width=140
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target10.x=530
 target10.y=300
+=======
+target10.x=510
+target10.y=250
+>>>>>>> Stashed changes
 =======
 target10.x=510
 target10.y=250
@@ -379,6 +417,7 @@ target11.name=JSONLoader
 target11.showInterface=false
 target11.type=ClassTarget
 target11.width=120
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 target11.x=460
 target11.y=420
@@ -397,6 +436,15 @@ target12.name=Meownsoon
 target12.showInterface=false
 target12.type=ClassTarget
 target12.width=120
+=======
+target11.x=600
+target11.y=30
+target12.height=70
+target12.name=Meownsoon
+target12.showInterface=false
+target12.type=ClassTarget
+target12.width=120
+>>>>>>> Stashed changes
 target12.x=470
 target12.y=520
 target13.height=70
@@ -448,6 +496,9 @@ target19.type=ClassTarget
 target19.width=120
 target19.x=470
 target19.y=600
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 target2.height=70
 target2.name=Growth
@@ -532,6 +583,7 @@ target3.showInterface=false
 target3.type=ClassTarget
 target3.width=120
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target3.x=250
 target3.y=450
 target4.height=70
@@ -608,12 +660,55 @@ target7.width=120
 target7.x=240
 target7.y=330
 target8.height=70
+=======
+target3.x=470
+target3.y=680
+target30.height=70
+target30.name=NormalizedWeather
+target30.showInterface=false
+target30.type=ClassTarget
+target30.width=150
+target30.x=600
+target30.y=760
+target4.height=70
+target4.name=Blessings
+target4.showInterface=false
+target4.type=ClassTarget
+target4.width=120
+target4.x=330
+target4.y=250
+target5.height=70
+target5.name=printyThing
+target5.showInterface=false
+target5.type=ClassTarget
+target5.width=120
+target5.x=530
+target5.y=140
+target6.height=70
+target6.name=Rain
+target6.showInterface=false
+target6.type=ClassTarget
+target6.width=120
+target6.x=340
+target6.y=680
+target7.height=70
+target7.name=Stat
+target7.showInterface=false
+target7.type=ClassTarget
+target7.width=120
+target7.x=240
+target7.y=330
+target8.height=70
+>>>>>>> Stashed changes
 target8.name=FloatingMirrors
 target8.showInterface=false
 target8.type=ClassTarget
 target8.width=120
 target8.x=600
 target8.y=600
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 target9.height=70
 target9.name=Team

@@ -3,6 +3,7 @@ comment0.target=Player
 comment1.params=
 comment1.target=Player()
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 comment10.params=stat
 comment10.target=double\ roundStat(double)
 comment11.params=stars
@@ -31,6 +32,8 @@ comment9.params=stat
 comment9.target=void\ printPlayer(java.lang.String)
 numComments=15
 =======
+=======
+>>>>>>> Stashed changes
 comment10.params=boost
 comment10.target=void\ boostDefense(double)
 comment11.params=team
@@ -98,4 +101,7 @@ comment8.target=void\ boostPitching(double)
 comment9.params=boost
 comment9.target=void\ boostBaserunning(double)
 numComments=35
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

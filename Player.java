@@ -355,6 +355,9 @@ public class Player
 <<<<<<< Updated upstream
 =======
         printMods();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         printStats();
         System.out.println("Pregame Ritual  " + pregameRitual);
@@ -402,6 +405,7 @@ public class Player
     
     public void printAdvancedStats(){
         System.out.print("Aggression      ");
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         printStat(aggression);
         System.out.println();
@@ -462,6 +466,8 @@ public class Player
         System.out.print("Wisdom          ");
         printStat(wisdom);
 =======
+=======
+>>>>>>> Stashed changes
         printStat(aggression.baseValue());
         System.out.println();
         System.out.print("Arrogance       ");
@@ -520,6 +526,9 @@ public class Player
         System.out.println();
         System.out.print("Wisdom          ");
         printStat(wisdom.baseValue());
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         System.out.println();
     }

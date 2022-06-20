@@ -12,7 +12,11 @@ public class League
     public static ArrayList<Player> birdNest; /**the name of this array list is ILLEGAL KNOWLEDGE*/
     public static ArrayList<Player> deceased;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     public static long seasonStartTime = 1653318000 * (long)1000;// - 3600000 *114;
+=======
+    public static long seasonStartTime = 1655737200 * (long)1000;// - 3600000 *114;
+>>>>>>> Stashed changes
 =======
     public static long seasonStartTime = 1655737200 * (long)1000;// - 3600000 *114;
 >>>>>>> Stashed changes
@@ -29,6 +33,9 @@ public class League
         recapAltAlt4();
         r = new Random(-5);
         season = -5;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         scheduleSeason(seasonStartTime);
         //Player[] god = new Player[1];

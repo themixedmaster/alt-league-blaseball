@@ -65,4 +65,7 @@ comment8.target=void\ batterElsewhere()
 comment9.params=p
 comment9.target=void\ beforeBaseSteal(Player)
 numComments=31
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

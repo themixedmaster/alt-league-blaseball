@@ -342,15 +342,21 @@ public class Game
                             weather.beforePitch();
                             doPitch();
                             weather.afterPitch();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                             break;
                         }
                     }
                 }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 strikes = 0;
                 balls = 0;
 =======
+=======
+>>>>>>> Stashed changes
                 if(!out){
                     pitcher.addStatistic("Strikeouts");
                     batter.addStatistic("Times struck out");
@@ -602,6 +608,9 @@ public class Game
     //precondition: simulateGame() has been called already
     public String gameName(){
         return gameName;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
@@ -731,6 +740,9 @@ public class Game
             baseStealOut = true;
             clearBase(baseNum);
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
@@ -817,6 +829,7 @@ public class Game
                 scoreB-=10;
                 winsB++;
             }
+<<<<<<< Updated upstream
             if(scoreB >= 10 && weather.equals("Black Hole")){
                 printlnC("The " + teamB.name + " collect 10!" +
                     "\nThe black hole swallows the Runs and a " + teamA.name + " win.");
@@ -839,6 +852,8 @@ public class Game
                     printlnC(p.name + " scores against Favour! 1 unrun scored!");
                     scoreA--;
 =======
+=======
+>>>>>>> Stashed changes
             if(!strikeout() || batter.hasMod("Persistent")){
                 batter.removeMod("Persistent");
                 pitchValue = r.nextDouble() * 10 + pitcher.powder.value();
@@ -967,6 +982,7 @@ public class Game
                     scored = true;
                 }else{
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     bases[x+baseRun] = bases[x];
                     bases[x] = null;
 =======
@@ -977,6 +993,10 @@ public class Game
                 for(int y = 0; y < baseRun; y++){
                     if(x+y >= bases.length - 1)
                         afterEnterBase(p, x+y);
+=======
+                    bases[x+basesRun] = bases[x];
+                    clearBase(x);
+>>>>>>> Stashed changes
                 }
             }
         }
@@ -1027,6 +1047,7 @@ public class Game
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     boolean canAdvanceExtra(int base, int basesRun){
         if(base + basesRun + 1 >= bases.length)
             return true;
@@ -1034,6 +1055,8 @@ public class Game
             return true;
         return false;
 =======
+=======
+>>>>>>> Stashed changes
     void clearBase(int baseNum){
         weather.baseLeft(baseNum);
         bases[baseNum] = null;
@@ -1133,6 +1156,21 @@ public class Game
             printScore();
         }
         weather.afterWalk();
+<<<<<<< Updated upstream
+=======
+    }
+
+    void printBases(){
+        String s = "";
+        for(int x = 0; x < bases.length; x++){
+            if(bases[x] == null){
+                s = s  + "_";
+            }else{
+                s = s + "X";
+            }
+        }
+        addEvent("[Bases:" + s + "]",0);
+>>>>>>> Stashed changes
     }
 
     void printScore(){
@@ -1205,6 +1243,7 @@ public class Game
         addEvent(batter.batMessage(battingTeam),tick);
         batter.addStatistic("Plate appearences");
         weather.batterDeclared();
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
     }
 
@@ -1213,6 +1252,8 @@ public class Game
             printlnInstant(cloud(message));
         else
             printlnInstant(message);
+=======
+>>>>>>> Stashed changes
     }
 
     void print(String message){
@@ -1245,6 +1286,9 @@ public class Game
         events.add(new Event(s,currentTime,special));
         //if(currentTime > startTime + 3600000)
             //System.out.println(s);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
@@ -1264,6 +1308,7 @@ public class Game
         }
     }
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     public String gameName(){
         if(season < 3 && season > -2)//change to 3 before release
@@ -1293,12 +1338,17 @@ public class Game
         int rand = (int)(r.nextDouble() * 6);
         //System.out.println((dayNum * season * teamA.favor * teamB.favor) + " " + rand);
 =======
+=======
+>>>>>>> Stashed changes
     int numberOfWeathers(){
         return 14;
     }
     
     Weather randomWeather(){
         int rand = (int)(r.nextDouble() * numberOfWeathers());
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         switch(rand){
             case 0:
@@ -1336,6 +1386,7 @@ public class Game
                 return new NamedWeather(this);
             case 13:
                 return new Brisk(this);
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
         }
     }
@@ -1360,6 +1411,8 @@ public class Game
                 break;
             default:
                 w = "";
+=======
+>>>>>>> Stashed changes
         }
         if(weatherValid(w))
             return w;

@@ -4,6 +4,7 @@ comment1.params=teamA\ teamB\ dayNum\ startTime\ season
 comment1.target=Game(Team,\ Team,\ int,\ long,\ int)
 comment10.params=
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 comment10.target=void\ beforeOut()
 comment11.params=
 comment11.target=void\ afterBatterDeclared()
@@ -162,6 +163,14 @@ comment11.target=void\ stealAttempt(int)
 comment12.params=baseNum
 comment12.target=void\ steal(int)
 comment13.params=
+=======
+comment10.target=void\ giveWins()
+comment11.params=baseNum
+comment11.target=void\ stealAttempt(int)
+comment12.params=baseNum
+comment12.target=void\ steal(int)
+comment13.params=
+>>>>>>> Stashed changes
 comment13.target=void\ doSteals()
 comment14.params=
 comment14.target=void\ doPitch()
@@ -261,4 +270,7 @@ numComments=90
 =======
 comment9.target=boolean\ gameEffectsRecord()
 numComments=42
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
