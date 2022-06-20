@@ -1,39 +1,11 @@
 import java.util.*;
-
 public class Player
 {
     String name;
     public double batting;
-    public double tempBatting = 0;
     public double pitching;
-    public double tempPitching = 0;
     public double baserunning;
-    public double tempBaserunning = 0;
     public double defense;
-<<<<<<< Updated upstream
-    public double tempDefense = 0;
-
-    public double aggression;
-    public double arrogance;
-    public double carcinization;
-    public double damage;
-    public double density;
-    public double dexterity;
-    public double dimensions;
-    public double effort;
-    public double focus;
-    public double fun;
-    public double grit;
-    public double hitPoints;
-    public double malleability;
-    public double mathematics;
-    public double numberOfEyes;
-    public double pinpointedness;
-    public double powder;
-    public double rejection;
-    public double splash;
-    public double wisdom;
-=======
                                //ILLEGAL KNOWLEDGE; for devs only
     public Stat aggression;    //batting; ability to avoid flyouts
     public Stat arrogance;     //baserunning; increases likelihood to attempt base-steal
@@ -55,7 +27,6 @@ public class Player
     public Stat rejection;     //defense; makes players less likely to attempt base-steals
     public Stat splash;        //batting; decreases chance of hitting fouls when hitting the ball.
     public Stat wisdom;        //defense; decreases chance of successful base steals
->>>>>>> Stashed changes
 
     String pregameRitual;
     String coffeeStyle;
@@ -63,12 +34,6 @@ public class Player
     int fate;
     String soulscream;
     public int id;
-<<<<<<< Updated upstream
-    public boolean fan = false; //for altalt fever weather
-    public boolean cat = false; //for altalt meownsoon weather
-    public boolean elsewhere = false; //for altalt moon weather
-    public boolean superCharged = false; //for faraday field weather
-=======
     HashMap<String,Double> statistics; //stuff like balls hit, number of pitches, etc
 
     ArrayList<String> mods;
@@ -76,7 +41,6 @@ public class Player
     //public boolean cat = false; //for altalt meownsoon weather
     //public boolean elsewhere = false; //for altalt moon weather
     //public boolean superCharged = false; //for faraday field weather
->>>>>>> Stashed changes
     public Team originalTeam; //used when a player is taken away from their team out of the league
     public Player()
     {
@@ -86,10 +50,10 @@ public class Player
     public String getName(){
         return name;
     }
-    
+
     public Player(String name){
         this.name = name;
-        
+
         aggression = randomUnweightedStat();
         arrogance = randomUnweightedStat();
         carcinization = randomUnweightedStat();
@@ -110,19 +74,21 @@ public class Player
         rejection = randomUnweightedStat();
         splash = randomUnweightedStat();
         wisdom = randomUnweightedStat();
-        
-        this.batting = (density + numberOfEyes / 2 + focus / 4 + malleability / 8 + splash * 3 / 4 + aggression * 3 / 32) / 2.28125;
+
+        /*this.batting = (density + numberOfEyes / 2 + focus / 4 + malleability / 8 + splash * 3 / 4 + aggression * 3 / 32) / 2.28125;
         this.pitching = (pinpointedness + fun / 2 + grit / 4 + dimensions / 8 + powder * 3 / 16) / 2.1875;
         this.baserunning = (hitPoints + effort / 2 + arrogance / 20 + dexterity / 40) / 1.575;
-        this.defense = (mathematics + damage / 2 + carcinization / 4 + rejection / 20 + wisdom / 40) / 1.825;
-        
+        this.defense = (mathematics + damage / 2 + carcinization / 4 + rejection / 20 + wisdom / 40) / 1.825;/**/
+        this.batting = (density.value() + numberOfEyes.value() + focus.value() + malleability.value() + splash.value() + aggression.value() ) / 6;
+        this.pitching = (pinpointedness.value() + fun.value() + grit.value() + dimensions.value() + powder.value()) / 5;
+        this.baserunning = (hitPoints.value() + effort.value() + arrogance.value() + dexterity.value() ) / 4;
+        this.defense = (mathematics.value() + damage.value() + carcinization.value() + rejection.value() + wisdom.value() ) / 5;
+
         this.pregameRitual = pregameRitual;
         this.coffeeStyle = coffeeStyle;
         this.bloodType = bloodType;
         this.fate = fate;
         this.soulscream = soulscream;
-<<<<<<< Updated upstream
-=======
         statistics = new HashMap<String,Double>();
         mods = new ArrayList<String>();
         PlayerMaker.addFlavor(this);
@@ -299,7 +265,6 @@ public class Player
             s = " " + s;
         }
         return s;
->>>>>>> Stashed changes
     }
 
     public void setFlavor(String pregameRitual, String coffeeStyle, String bloodType, int fate, String soulscream){
@@ -314,12 +279,8 @@ public class Player
         return League.r.nextDouble() * 2.5 + League.r.nextDouble() * 2.5;
     }
 
-    public static double randomUnweightedStat(){
-        return League.r.nextDouble() * 5;
-    }
-    
-    public double getBatting(){
-        return batting + tempBatting;
+    public static Stat randomUnweightedStat(){
+        return new Stat(League.r.nextDouble() * 5);
     }
 
     public double totalStars(){
@@ -352,13 +313,7 @@ public class Player
 
     public void printPlayer(int mode){
         System.out.println(name);
-<<<<<<< Updated upstream
-=======
         printMods();
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
         printStats();
         System.out.println("Pregame Ritual  " + pregameRitual);
         System.out.println("Coffee Style    " + coffeeStyle);
@@ -370,8 +325,6 @@ public class Player
         System.out.println();
     }
 
-<<<<<<< Updated upstream
-=======
     public void printMods(){
         if(mods.size() > 0){
             System.out.println("Mods:");
@@ -387,7 +340,6 @@ public class Player
         return "This player is " + s + ".";
     }
     
->>>>>>> Stashed changes
     public void printStats(){
         System.out.print("Batting         ");
         printStat(batting);
@@ -402,72 +354,9 @@ public class Player
         printStat(defense);
         System.out.println();
     }
-    
+
     public void printAdvancedStats(){
         System.out.print("Aggression      ");
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        printStat(aggression);
-        System.out.println();
-        System.out.print("Arrogance       ");
-        printStat(arrogance);
-        System.out.println();
-        System.out.print("Carcinization   ");
-        printStat(carcinization);
-        System.out.println();
-        System.out.print("Damage          ");
-        printStat(damage);
-        System.out.println();
-        System.out.print("Density         ");
-        printStat(density);
-        System.out.println();
-        System.out.print("Dexterity       ");
-        printStat(dexterity);
-        System.out.println();
-        System.out.print("Dimensions      ");
-        printStat(dimensions);
-        System.out.println();
-        System.out.print("Effort          ");
-        printStat(effort);
-        System.out.println();
-        System.out.print("Focus           ");
-        printStat(focus);
-        System.out.println();
-        System.out.print("Fun             ");
-        printStat(fun);
-        System.out.println();
-        System.out.print("Grit            ");
-        printStat(grit);
-        System.out.println();
-        System.out.print("Hit Points      ");
-        printStat(hitPoints);
-        System.out.println();
-        System.out.print("Malleability    ");
-        printStat(malleability);
-        System.out.println();
-        System.out.print("Mathematics     ");
-        printStat(mathematics);
-        System.out.println();
-        System.out.print("Number of Eyes  ");
-        printStat(numberOfEyes);
-        System.out.println();
-        System.out.print("Pinpointedness  ");
-        printStat(pinpointedness);
-        System.out.println();
-        System.out.print("Powder          ");
-        printStat(powder);
-        System.out.println();
-        System.out.print("Rejection       ");
-        printStat(rejection);
-        System.out.println();
-        System.out.print("Splash          ");
-        printStat(splash);
-        System.out.println();
-        System.out.print("Wisdom          ");
-        printStat(wisdom);
-=======
-=======
->>>>>>> Stashed changes
         printStat(aggression.baseValue());
         System.out.println();
         System.out.print("Arrogance       ");
@@ -526,10 +415,6 @@ public class Player
         System.out.println();
         System.out.print("Wisdom          ");
         printStat(wisdom.baseValue());
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
         System.out.println();
     }
 }

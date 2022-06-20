@@ -2,38 +2,6 @@
 comment0.target=Player
 comment1.params=
 comment1.target=Player()
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-comment10.params=stat
-comment10.target=double\ roundStat(double)
-comment11.params=stars
-comment11.target=void\ printStat(double)
-comment12.params=mode
-comment12.target=void\ printPlayer(int)
-comment13.params=
-comment13.target=void\ printStats()
-comment14.params=
-comment14.target=void\ printAdvancedStats()
-comment2.params=
-comment2.target=java.lang.String\ getName()
-comment3.params=name
-comment3.target=Player(java.lang.String)
-comment4.params=pregameRitual\ coffeeStyle\ bloodType\ fate\ soulscream
-comment4.target=void\ setFlavor(java.lang.String,\ java.lang.String,\ java.lang.String,\ int,\ java.lang.String)
-comment5.params=
-comment5.target=double\ randomStat()
-comment6.params=
-comment6.target=double\ randomUnweightedStat()
-comment7.params=
-comment7.target=double\ getBatting()
-comment8.params=
-comment8.target=double\ totalStars()
-comment9.params=stat
-comment9.target=void\ printPlayer(java.lang.String)
-numComments=15
-=======
-=======
->>>>>>> Stashed changes
 comment10.params=boost
 comment10.target=void\ boostDefense(double)
 comment11.params=team
@@ -101,7 +69,3 @@ comment8.target=void\ boostPitching(double)
 comment9.params=boost
 comment9.target=void\ boostBaserunning(double)
 numComments=35
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes

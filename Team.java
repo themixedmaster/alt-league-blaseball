@@ -67,9 +67,6 @@ public class Team
         }
         System.out.println();
     }
-<<<<<<< Updated upstream
-
-=======
     
     public static int ablePlayers(Player[] players){
         int x = 0;
@@ -79,7 +76,6 @@ public class Team
         return x;
     }
     
->>>>>>> Stashed changes
     public Player[] getActivePlayers(){
         Player[] players = new Player[lineup.length + rotation.length];
         for(int x = 0; x < lineup.length;x++){
@@ -89,6 +85,22 @@ public class Team
             players[lineup.length + x] = rotation[x];
         }
         return players;
+    }
+    
+    public int getPositionInLineup(Player p){
+        for(int x = 0; x < lineup.length; x++){
+            if(lineup[x].equals(p))
+                return x;
+        }
+        return -1;
+    }
+    
+    public int getPositionInRotation(Player p){
+        for(int x = 0; x < rotation.length; x++){
+            if(rotation[x].equals(p))
+                return x;
+        }
+        return -1;
     }
     
     public String getWins(){

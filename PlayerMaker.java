@@ -99,12 +99,12 @@ public class PlayerMaker
         Random r = new Random(seed);
         double y = 1;
         for(int x = 0; x < 8; x++){
-                scream = scream + soulscreamChars[(int)(League.r.nextDouble() * soulscreamChars.length)];
+                scream = scream + soulscreamChars[(int)(r.nextDouble() * soulscreamChars.length)];
             }
         do{
             y = y * 0.9;
             for(int x = 0; x < 8; x++){
-                scream = scream + soulscreamChars[(int)(League.r.nextDouble() * soulscreamChars.length)];
+                scream = scream + soulscreamChars[(int)(r.nextDouble() * soulscreamChars.length)];
             }
         }while(r.nextDouble() < y);
         return scream;

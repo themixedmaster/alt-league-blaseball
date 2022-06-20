@@ -1,11 +1,11 @@
+import java.util.*;
 public class Weather
 {
-    String name;
-    NewGame game;
-    public Weather(NewGame game){
+    String name = "Clear";
+    Game game;
+    Random r;
+    public Weather(Game game){
         this.game = game;
-<<<<<<< Updated upstream
-=======
         r = new Random(game.dayNum * (long)Math.pow(game.teamA.favor,game.teamB.favor) + (long)Math.pow(game.teamB.favor,game.teamA.favor));
     }
 
@@ -123,6 +123,5 @@ public class Weather
     
     public void endOfGame(){
         
->>>>>>> Stashed changes
     }
 }

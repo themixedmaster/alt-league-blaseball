@@ -1,5 +1,15 @@
 #BlueJ class context
 comment0.target=Event
-comment1.params=text\ time
-comment1.target=Event(java.lang.String,\ long)
-numComments=2
+comment1.params=text\ time\ special
+comment1.target=Event(java.lang.String,\ long,\ boolean)
+comment2.params=text\ time
+comment2.target=Event(java.lang.String,\ long)
+comment3.params=time
+comment3.target=void\ setTime(long)
+comment4.params=
+comment4.target=long\ time()
+comment5.params=
+comment5.target=java.lang.String\ text()
+comment6.params=
+comment6.target=boolean\ isSpecial()
+numComments=7

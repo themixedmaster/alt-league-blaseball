@@ -4,29 +4,23 @@ public class GameTester
 {
     public static void main(String[] args){
         Scanner console = new Scanner(System.in);
-        System.out.print("Welcome to Alt(Alt) League Blaseball(alpha)! ");
+        System.out.print("Welcome to Alt(Alt) League Blaseball! ");
         int selection = 0;
         do{
             System.out.println("Where would you like to go? ");
-            System.out.println("0-Games\n1-Standings\n2-Election\n3-Exit");
+            System.out.println("0-Games\n1-Standings\n2-Election\n3-Feed (Beta)\n4-Exit");
             selection = console.nextInt();
             switch(selection){
                 case 0:
                     League.resetLeague();
-                    League.runPostseason();
-                    Game[] running = League.getCurrentGames(League.getGameDay());
+                    League.runAllGames();
+                    ArrayList<Game> games = League.getAllGames();
                     ArrayList<Game> liveGames = new ArrayList<Game>(); 
-                    if(running == null){
-                        System.out.println("There are no games scheduled for Day " + League.getGameDay() + ".");
-                        break;
-                    }
-                    for(int x = 0; x < running.length; x++){
-                        running[x].runGame();
-                        if(running[x].isLive()){
-                            liveGames.add(running[x]);
+                    for(int x = 0; x < games.size(); x++){
+                        if(games.get(x).isLive()){
+                            liveGames.add(games.get(x));
                         }
                     }
-                    System.out.println("Day " + League.getGameDay());
                     if(liveGames.size() > 0){
                         System.out.println("Which game would you like to watch?");
                     }else{
@@ -38,9 +32,7 @@ public class GameTester
                     }
                     selection = console.nextInt();
                     if(selection < liveGames.size() && selection > -1){
-                        liveGames.get(selection).watch();
-                        liveGames.get(selection).runGame();
-                        liveGames.get(selection).leave();
+                        liveGames.get(selection).playLog();
                     }else{
                         System.out.println("No corresponding game found.");
                     }
@@ -50,17 +42,15 @@ public class GameTester
                 case 1:
                     League.resetLeague();
                     selection = 0;
+                    League.runGamesUpToDate();
+                    if(League.getGameDay() > 114){
+                        Team champion = League.getChampion();
+                        System.out.println("Your season " + League.season + " champions are the " + champion.getTeamName() + "!");
+                    }
                     if(League.getGameDay() > 99){
-                        League.runPostseason();
-                        if(League.getGameDay() > 114){
-                            Team champion = League.getRoundWinner(League.postseason3, 0);
-                            System.out.println("Your season " + League.season + " champions are the " + champion.getTeamName() + "!");
-                        }
                         System.out.println("\n0-View regular season standings");
                         System.out.println("1-View postseason");
                         selection = console.nextInt();
-                    }else{
-                        League.runAllGames();
                     }
                     switch(selection){
                         case 0:
@@ -130,45 +120,25 @@ public class GameTester
                 case 2:
                     System.out.println("Election results:\n");
                     System.out.println("Shadow decrees:");
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                    System.out.println("  Telescope(Telescope) - THE TIMELESS BATTLE BE WITNESSED.");
-                    System.out.println("  Temporal Assertion - Several Weathers have been temporally altered.");
-                    System.out.println("    Meownsoon has been temporally revoked.");
-                    System.out.println("    Moon has been temporally revoked.");
-                    System.out.println("    Duel has been temporally revoked.");
-                    System.out.println("    Error has been temporally truncated.");
-                    System.out.println("\nPost Election:\n");
-                    System.out.println("BIRD: [BIRD NOISES]");
-                    System.out.println("BIRD: Hope you've been enjoying the Alt(Alt) League.");
-                    System.out.println("BIRD: I found a telescope.");
-                    System.out.println("BIRD: Let's look through it.");
-=======
                     System.out.println("  Skipping - TIMELINE RETRACTED. PLAYERS RESTORED");
                     System.out.println("\nPost Election:\n");
                     System.out.println("BIRD: [BIRD NOISES]");
                     System.out.println("BIRD: Oh look, more weathers.");
->>>>>>> Stashed changes
-=======
-                    System.out.println("  Skipping - TIMELINE RETRACTED. PLAYERS RESTORED");
-                    System.out.println("\nPost Election:\n");
                     System.out.println("BIRD: [BIRD NOISES]");
-                    System.out.println("BIRD: Oh look, more weathers.");
->>>>>>> Stashed changes
-                    System.out.println("BIRD: [BIRD NOISES]");
-                    System.out.println("Alt(Alt) League Blaseball will return.");
-                    System.out.println("Alt League Blaseball will return.");
+                    /*System.out.println("\nThe Mantle creaks.");
+                    System.out.println("A visceral mass.");
+                    System.out.println("hall.");*/
                     System.out.println();
                     break;
-                /*case 3:
-                    Feed.ViewFeed();
-                    break;*/
                 case 3:
+                    Feed.ViewFeed();
+                    break;
+                case 4:
                     break;
                 default:
                     System.out.println("That number doesn't do anything.");
                     break;
             }
-        }while(selection != 3);
+        }while(selection != 4);
     }
 }
