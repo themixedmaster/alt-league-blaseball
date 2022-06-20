@@ -1,17 +1,26 @@
+import java.util.HashMap;
+
 //will be fully implemented next season
 //elsewhere result is disabled becaue of infinite inning issues
 public class Meownsoon extends Weather
 {
     String nameA;
     String nameB;
+    HashMap<Player,Integer> foodEaten;
     public Meownsoon(Game game){
         super(game);
         name = "Meownsoon";
-    }
-
-    public void startOfGame(){
+        foodEaten = new HashMap<Player,Integer>();
         nameA = game.teamA.name;
         nameB = game.teamB.name;
+    }
+    
+    public void eatFood(Player p){
+        if(foodEaten.containsKey(p))
+            foodEaten.put(p,foodEaten.get(p) + 1);
+        else
+            foodEaten.put(p,1);
+        p.addStatistic("Food eaten");
     }
     
     public void beforeHalfInning(){
@@ -99,12 +108,12 @@ public class Meownsoon extends Weather
                 switch(random){
                     case 0:
                         game.addEvent(p.name + " leaps into the stands and steals a fan's sunflower seeds! Their batting improves slightly.");
-                        p.addStatistic("Food eaten");
+                        eatFood(p);
                         p.boostBatting(0.5);
                         break;
                     case 1:
                         game.addEvent(p.name + " leaps into the stands and steals a fan's hot dog! Their batting improves drastically.");
-                        p.addStatistic("Food eaten");
+                        eatFood(p);
                         p.boostBatting(1.5);
                         break;
                 }
@@ -118,12 +127,12 @@ public class Meownsoon extends Weather
                 switch(random){
                     case 0:
                         game.addEvent(p.name + " leaps into the stands and steals a fan's chips! Their pitching improves slightly.");
-                        p.addStatistic("Food eaten");
+                        eatFood(p);
                         p.boostPitching(0.5);
                         break;
                     case 1:
                         game.addEvent(p.name + " leaps into the stands and steals a fan's sunflower seeds! Their pitching improves drastically.");
-                        p.addStatistic("Food eaten");
+                        eatFood(p);
                         p.boostPitching(1.5);
                         break;
                 }
@@ -140,7 +149,7 @@ public class Meownsoon extends Weather
                 switch(random){
                     case 1:
                         game.addEvent(p.name + " leaps into the stands and steals a fan's slushie! They get a brain freeze, and are swept off base in a frenzy!");
-                        p.addStatistic("Food eaten");
+                        eatFood(p);
                         game.bases[i] = null;
                         break;
                 }
@@ -158,25 +167,34 @@ public class Meownsoon extends Weather
                 if(p == null)
                     break;
                 game.addEvent(p.name + " leaps into the stands and steals a fan's peanuts! They taste the Infinite, and purr back!");
-                p.addStatistic("Food eaten");
+                eatFood(p);
                 break;
             case 3:
                 if(p == null)
                     break;
                 game.addEvent("Rogue Umpire incinerates " + p.name + "! " + p.name + " loses a life! The Umpire is incinerated for being a dog person!");
-                p.addStatistic("Food eaten");
                 break;
             case 4:
                 if(p == null)
                     break;
                 game.addEvent(p.name + " leaps into the stands and steals a fan's breakfast! They take a catnap, and don't wake up for the rest of the game!");
-                p.addStatistic("Food eaten");
+                eatFood(p);
                 if(i != -1)
                     game.bases[i] = null;
                 if(Team.ablePlayers(t.lineup) > 1){
-                    p.elsewhere = true;
+                    p.addMod("Elsewhere");
                 }
                 break;
+        }
+        if(p == null)
+            return;
+        try{
+            if(foodEaten.get(p) >= 3){
+                game.addEvent(p.name + " overate, resetting all stat boosts!");
+                p.clearTemporaryStats();
+            }
+        }catch(NullPointerException e){
+            return;
         }
     }
     
@@ -185,7 +203,7 @@ public class Meownsoon extends Weather
         game.teamB.name = nameB;
         for(Player p : game.activePlayers()){
             p.removeMod("Cat");
-            p.elsewhere = false;
+            p.removeMod("Elsewhere");
         }
     }
 }

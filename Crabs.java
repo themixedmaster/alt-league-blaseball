@@ -11,7 +11,8 @@ public class Crabs extends Weather
     
     public void afterBall(){
         for(int x = game.bases.length - 1; x >= 0; x--){
-            game.stealAttempt(x);
+            if(game.bases[x] != null)
+                game.steal(x);
         }
     }
 }

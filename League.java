@@ -12,15 +12,15 @@ public class League
     static ArrayList<Game> allGames;
     public static ArrayList<Player> birdNest; /**the name of this array list is ILLEGAL KNOWLEDGE*/
     public static ArrayList<Player> deceased;
-    public static long seasonStartTime = 1655132400 * (long)1000;// - 3600000 *114;
+    public static long seasonStartTime = 1655737200 * (long)1000;// - 3600000 *114;
     //public static long seasonStartTime = 1651503600 * (long)1000;// + 3600000 * (long)17;// - 60000 * (long)12;// - (long)(86400 * 1000 * 5) - (long)(3600 * 1000 * 22);
     public static int season;
     public static int nextID;
     static Random r;
     public static void resetLeague(){
         recapAltAlt4();
-        r = new Random(-4);
-        season = -4;
+        r = new Random(-5);
+        season = -5;
         scheduleSeason(seasonStartTime);
         nextID = 0;
         //Player[] god = new Player[1];

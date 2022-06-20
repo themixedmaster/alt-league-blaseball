@@ -2,8 +2,8 @@
 comment0.target=Meownsoon
 comment1.params=game
 comment1.target=Meownsoon(Game)
-comment2.params=
-comment2.target=void\ startOfGame()
+comment2.params=p
+comment2.target=void\ eatFood(Player)
 comment3.params=
 comment3.target=void\ beforeHalfInning()
 comment4.params=

@@ -15,6 +15,7 @@ public class Game //name will be changed to Game when finished and replace curre
     long currentTime;
     ArrayList<Event> events;
     Weather weather;
+    String weatherName;
 
     int inning;
     boolean top;
@@ -43,7 +44,8 @@ public class Game //name will be changed to Game when finished and replace curre
     boolean teamBScored = false;
 
     Player[] bases;
-
+    
+    String gameName;
     public Game(Team teamA, Team teamB, int dayNum, long startTime){
         this.teamA = teamA;
         this.teamB = teamB;
@@ -56,6 +58,8 @@ public class Game //name will be changed to Game when finished and replace curre
     public void simulateGame(){
         r = new Random(dayNum * (long)Math.pow(teamA.favor,teamB.favor) + (long)Math.pow(teamB.favor,teamA.favor));
         weather = randomWeather();
+        weatherName = weather.name;
+        gameName = weatherName + ", " + teamA.getTeamName() + " vs. " + teamB.getTeamName() + ", Day " + dayNum;
         addEvent(teamA.getTeamName() + " vs. " + teamB.getTeamName(),0);
 
         inning = 1;
@@ -108,13 +112,16 @@ public class Game //name will be changed to Game when finished and replace curre
                         case 1:
                             weather.beforePitch();
                             doPitch();
+                            weather.afterPitch();
                             break;
                     }
                     x++;
                     //printBases();//debug feature
                 }
-                if(!out)
+                if(!out){
                     pitcher.addStatistic("Strikeouts");
+                    batter.addStatistic("Times struck out");
+                }
                 out = false;
                 outs++;
                 addEvent("[Out " + outs + "]",0);
@@ -140,9 +147,10 @@ public class Game //name will be changed to Game when finished and replace curre
             int temp3 = activeTeamBat;
             activeTeamBat = inactiveTeamBat;
             inactiveTeamBat = temp3;
+            if(endOfGame())
+                weather.beforeEndOfPlay();
         }
         addEvent(teamA.getName() + " " + scoreToString(scoreA) + ", " + teamB.getName() + " " + scoreToString(scoreB),tick);
-        addEvent("\nGame over.",tick);
         giveWins();
         clearGameEffects();
         if(!teamAScored)
@@ -150,13 +158,11 @@ public class Game //name will be changed to Game when finished and replace curre
         if(!teamBScored)
             pitcherA.addStatistic("Shutouts");
         weather.endOfGame();
+        addEvent("\nGame over.",tick);
     }
 
     void clearGameEffects(){
-        for(Player p : teamA.getActivePlayers()){
-            p.clearTemporaryStats();
-        }
-        for(Player p : teamB.getActivePlayers()){
+        for(Player p : activePlayers()){
             p.clearTemporaryStats();
         }
     }
@@ -188,7 +194,7 @@ public class Game //name will be changed to Game when finished and replace curre
 
     //precondition: simulateGame() has been called already
     public String gameName(){
-        return weather.name() + ", " + teamA.getTeamName() + " vs. " + teamB.getTeamName() + ", Day " + dayNum;
+        return gameName;
     }
 
     //precondition: simulateGame() has been called already
@@ -223,6 +229,8 @@ public class Game //name will be changed to Game when finished and replace curre
                 pitcherB.addStatistic("Pitcher wins");
             }
         }
+        winsA = weather.alterWinsA(winsA);
+        winsB = weather.alterWinsA(winsB);
         if(gameEffectsRecord()){
             teamA.win(winsA);
             teamB.win(winsB);
@@ -230,14 +238,22 @@ public class Game //name will be changed to Game when finished and replace curre
     }
 
     void stealAttempt(int baseNum){
-        Player defender = randomDefender();
-        double urge = r.nextDouble() * 10 + bases[baseNum].arrogance.value() - defender.rejection.value();
-        if(urge < 9.9)
+        defender = randomDefender();
+        double urge = r.nextDouble() * 10 + bases[baseNum].arrogance.value()/3 - defender.rejection.value()/3;
+        if(urge < 9.95)
             return;
+        steal(baseNum);
+        doSteals();
+    }
+
+    void steal(int baseNum){
         bases[baseNum].addStatistic("Base steal attempts");
+        if(defender == null)
+            defender = randomDefender();
         double stealValue = r.nextDouble() * 10 + bases[baseNum].dexterity.value();
         double defenseValue = r.nextDouble() * 10 + defender.wisdom.value();
         if(stealValue > defenseValue){
+            weather.beforeBaseSteal(bases[baseNum]);
             bases[baseNum].addStatistic("Bases stolen");
             switch(baseNum){
                 case 0:
@@ -257,7 +273,7 @@ public class Game //name will be changed to Game when finished and replace curre
             }
             if(baseNum < bases.length-1)
                 bases[baseNum+1] = bases[baseNum];
-            bases[baseNum] = null;
+            clearBase(baseNum);
         }else{
             bases[baseNum].addStatistic("Caught stealing");
             switch(baseNum){
@@ -276,9 +292,8 @@ public class Game //name will be changed to Game when finished and replace curre
             }
             out = true;
             baseStealOut = true;
-            bases[baseNum] = null;
+            clearBase(baseNum);
         }
-        doSteals();
     }
 
     void doSteals(){
@@ -293,7 +308,7 @@ public class Game //name will be changed to Game when finished and replace curre
 
     void doPitch(){
         double pitchValue = r.nextDouble() * 10 + pitcher.pinpointedness.value();
-        double batValue = r.nextDouble() * 7 + batter.density.value();
+        double batValue = r.nextDouble() * 5 + batter.density.baseValue();//density can't be temp boosted
         pitcher.addStatistic("Pitches thrown");
         batter.addStatistic("Times pitched to");
         if(batValue > pitchValue){
@@ -302,19 +317,23 @@ public class Game //name will be changed to Game when finished and replace curre
             ball();
             weather.afterBall();
         }else{
+            boolean struck = false;
             pitchValue = r.nextDouble() * 10 + pitcher.fun.value();
             batValue = r.nextDouble() * 10 + batter.numberOfEyes.value();
+            batValue = weather.alterEyesRoll(batValue);
             if(batValue <= pitchValue){
                 pitchValue = r.nextDouble() * 10 + pitcher.grit.value();
                 batValue = r.nextDouble() * 10 + batter.focus.value();
                 if(batValue <= pitchValue){
                     strikes++;
+                    struck = true;
                     batter.addStatistic("Strikes");
                     batter.addStatistic("Looking strikes");
                     if(strikeout())
                         addEvent(batter.name + " strikes out looking.",tick);
                     else
                         addEvent("Strike, looking. " + bs(),tick);
+                    return;
                 }else{
                     pitchValue = r.nextDouble() * 10 + pitcher.dimensions.value();
                     batValue = r.nextDouble() * 10 + batter.malleability.value();
@@ -326,16 +345,18 @@ public class Game //name will be changed to Game when finished and replace curre
                             addEvent(batter.name + " strikes out swinging.",tick);
                         else
                             addEvent("Strike, swinging. " + bs(),tick);
+                        return;
                     }
                 }
             }
-            if(!strikeout()){
+            if(!strikeout() || batter.hasMod("Persistent")){
+                batter.removeMod("Persistent");
                 pitchValue = r.nextDouble() * 10 + pitcher.powder.value();
                 batValue = r.nextDouble() * 10 + batter.splash.value();
                 if(batValue <= pitchValue){
                     strikes++;
                     batter.addStatistic("Strikes");
-                    while(strikeout()){
+                    while(overStrikeLimit()){
                         strikes--;
                         batter.addStatistic("Strikes",-1);
                     }
@@ -344,6 +365,7 @@ public class Game //name will be changed to Game when finished and replace curre
                     pitcher.addStatistic("Foul balls pitched");
                 }else{
                     defender = randomDefender();
+                    weather.defenderDeclared();
                     batValue = r.nextDouble() * 10 + batter.aggression.value();
                     double defenseValue = r.nextDouble() * 10 + defender.mathematics.value();
                     if(batValue <= defenseValue){
@@ -360,12 +382,16 @@ public class Game //name will be changed to Game when finished and replace curre
                             batter.addStatistic("Ground outs hit");
                             defender.addStatistic("Ground outs fielded");
                         }else{
+                            batter.addStatistic("Hits");
                             int basesRun = 0;
+                            double baseDifficulty = 0;
                             do{
                                 batValue = r.nextDouble() * 10 + batter.effort.value();
-                                defenseValue = r.nextDouble() * 10 + defender.carcinization.value();
+                                defenseValue = r.nextDouble() * 10 + defender.carcinization.value() + baseDifficulty;
                                 basesRun++;
+                                baseDifficulty+=0.1;
                             }while(batValue > defenseValue);
+                            basesRun = weather.alterBasesRun(basesRun);
                             switch(basesRun){
                                 case 1:
                                     addEvent(batter.name + " hits a Single!",tick);
@@ -388,6 +414,9 @@ public class Game //name will be changed to Game when finished and replace curre
                                     pitcher.addStatistic("Home runs allowed");
                                     break;
                             }
+                            weather.afterHit();
+                            if(basesRun >= 4)
+                                weather.afterHomeRun();
                             advanceBaserunners(basesRun);
                             setNextBatter();
                         }
@@ -403,11 +432,11 @@ public class Game //name will be changed to Game when finished and replace curre
             if(bases[x] != null){
                 if(x + basesRun >= bases.length){
                     score(bases[x]);
-                    bases[x] = null;
+                    clearBase(x);
                     scored = true;
                 }else{
                     bases[x+basesRun] = bases[x];
-                    bases[x] = null;
+                    clearBase(x);
                 }
             }
         }
@@ -421,6 +450,11 @@ public class Game //name will be changed to Game when finished and replace curre
         if(scored){
             printScore();
         }
+    }
+
+    void clearBase(int baseNum){
+        weather.baseLeft(baseNum);
+        bases[baseNum] = null;
     }
 
     Player randomDefender(){
@@ -456,7 +490,11 @@ public class Game //name will be changed to Game when finished and replace curre
     }
 
     boolean strikeout(){
-        return strikes >= 3 || out;
+        return weather.alterStrikeout(overStrikeLimit() || out);
+    }
+    
+    boolean overStrikeLimit(){
+        return strikes >= 3;
     }
 
     String bs(){ //balls strikes
@@ -470,12 +508,17 @@ public class Game //name will be changed to Game when finished and replace curre
     }
 
     void clearBases(){
-        bases = new Player[3];
+        if(bases != null){
+            for(int x = 0; x < bases.length; x++)
+                if(bases[x] != null)
+                    clearBase(x);
+        }else
+            bases = new Player[3];
     }
 
     void ball(){
         balls++;
-        if(balls >= 4){
+        if(weather.alterWalk(balls >= 4) && !batter.hasMod("Stubbed Toe")){
             addEvent(batter.walkMessage(),tick);
             batter.addStatistic("Walks");
             pitcher.addStatistic("Walks allowed");
@@ -486,6 +529,7 @@ public class Game //name will be changed to Game when finished and replace curre
     }
 
     void walk(){
+        weather.beforeWalk();
         boolean scored = false;
         Player moving = batter;
         for(int x = 0; x < bases.length; x++){
@@ -505,6 +549,7 @@ public class Game //name will be changed to Game when finished and replace curre
         if(scored){
             printScore();
         }
+        weather.afterWalk();
     }
 
     void printBases(){
@@ -535,11 +580,12 @@ public class Game //name will be changed to Game when finished and replace curre
     }
 
     void score(Player p){
+        double runsScored = weather.alterRunsScored(1);
         if(top){
-            scoreB++;
+            scoreB+=runsScored;
             teamBScored = true;
         }else{
-            scoreA++;
+            scoreA+=runsScored;
             teamAScored = true;
         }
         addEvent(p.name + " scores!",0);
@@ -557,16 +603,19 @@ public class Game //name will be changed to Game when finished and replace curre
 
     //sets the next batter unless the inning is about to end
     void setNextBatter(){
-        if(endOfInning())
+        if(endOfInning() || (batter != null && batter.hasMod("Persistent")))
             return;
         strikes = 0;
         balls = 0;
         do{
             activeTeamBat++;
             batter = battingTeam.lineup[(activeTeamBat-1) % battingTeam.lineup.length];
-        }while(batter.elsewhere);
+            if(batter.hasMod("Elsewhere"))
+                weather.batterElsewhere();
+        }while(batter.hasMod("Elsewhere"));
         addEvent(batter.batMessage(battingTeam),tick);
         batter.addStatistic("Plate appearences");
+        weather.batterDeclared();
     }
 
     void addEvent(String s){
@@ -578,15 +627,15 @@ public class Game //name will be changed to Game when finished and replace curre
     }
 
     void addEvent(String s, int tick){
-        events.add(new Event(s,currentTime));
-        currentTime+=tick;
-        if(currentTime > startTime + 3600000)
-            System.out.println(s);
+        addEvent(s,tick,false);
     }
 
     void addEvent(String s, int tick, boolean special){
-        events.add(new Event(s,currentTime,special));
         currentTime+=tick;
+        weather.beforeAddEvent();
+        events.add(new Event(s,currentTime,special));
+        //if(currentTime > startTime + 3600000)
+            //System.out.println(s);
     }
     //precondition: at least 1 event in events
     public void setStartTime(long startTime){
@@ -603,8 +652,12 @@ public class Game //name will be changed to Game when finished and replace curre
         }
     }
 
+    int numberOfWeathers(){
+        return 14;
+    }
+    
     Weather randomWeather(){
-        int rand = (int)(r.nextDouble() * 2);
+        int rand = (int)(r.nextDouble() * numberOfWeathers());
         switch(rand){
             case 0:
                 return new SolarEclipse(this);
@@ -616,6 +669,24 @@ public class Game //name will be changed to Game when finished and replace curre
                 return new SnailMail(this);
             case 4:
                 return new Crabs(this);
+            case 5:
+                return new FloatingMirrors(this);
+            case 6:
+                return new Rain(this);
+            case 7:
+                return new Distortion(this);
+            case 8:
+                return new Growth(this);
+            case 9:
+                return new FeverPitch(this);
+            case 10:
+                return new Multiball(this);
+            case 11:
+                return new NormalizedWeather(this);
+            case 12:
+                return new NamedWeather(this);
+            case 13:
+                return new Brisk(this);
         }
         return new Weather(this);
     }

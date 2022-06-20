@@ -1,9 +1,9 @@
 #BlueJ class context
-comment0.target=SnailMail
+comment0.target=Growth
 comment1.params=game
-comment1.target=SnailMail(Game)
+comment1.target=Growth(Game)
 comment2.params=
 comment2.target=void\ startOfGame()
 comment3.params=
-comment3.target=void\ beforeAddEvent()
+comment3.target=void\ beforePitch()
 numComments=4

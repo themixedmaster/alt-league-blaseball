@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=NamedWeather
+comment1.params=game
+comment1.target=NamedWeather(Game)
+comment2.params=
+comment2.target=void\ beforeHalfInning()
+comment3.params=winsA
+comment3.target=int\ alterWinsA(int)
+comment4.params=winsB
+comment4.target=int\ alterWinsB(int)
+comment5.params=
+comment5.target=void\ endOfGame()
+numComments=6

@@ -120,16 +120,10 @@ public class GameTester
                 case 2:
                     System.out.println("Election results:\n");
                     System.out.println("Shadow decrees:");
-                    System.out.println("  Advanced stats - MEIOSIS. STATS DEFINED.");
-                    System.out.println("  Alt^3 - FAN TEAMS DISSOLVED. ALTERNATE ALTERNATE.");
+                    System.out.println("  Skipping - TIMELINE RETRACTED. PLAYERS RESTORED");
                     System.out.println("\nPost Election:\n");
                     System.out.println("BIRD: [BIRD NOISES]");
-                    System.out.println("BIRD: I brought back the normal teams.");
-                    System.out.println("BIRD: The regular players are still sleeping though.");
-                    System.out.println("BIRD: I've managed to salvage some of the feed.");
-                    System.out.println("BIRD: Fair warning...");
-                    System.out.println("BIRD: The umpires seem tired of waiting...");
-                    System.out.println("BIRD: Blay pall.");
+                    System.out.println("BIRD: Oh look, more weathers.");
                     System.out.println("BIRD: [BIRD NOISES]");
                     /*System.out.println("\nThe Mantle creaks.");
                     System.out.println("A visceral mass.");

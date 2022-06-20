@@ -17,7 +17,7 @@ public class Player
     public Stat effort;        //baserunning; ability to run additional bases
     public Stat focus;         //batting; increaes likelihood to swing, avoid strike, looking.
     public Stat fun;           //pitching; decreases chance for batter to predict the pitch
-    public Stat grit;          //pitching; makes batters more likely to strike, swinging.
+    public Stat grit;          //pitching; makes batters more likely to strike, looking.
     public Stat hitPoints;     //baserunning; ability to avoid ground outs
     public Stat malleability;  //batting; decreases chance to strike, swinging
     public Stat mathematics;   //defense; increaes chance to catch a flyout
@@ -39,7 +39,7 @@ public class Player
     ArrayList<String> mods;
     //public boolean fan = false; //for altalt fever weather
     //public boolean cat = false; //for altalt meownsoon weather
-    public boolean elsewhere = false; //for altalt moon weather
+    //public boolean elsewhere = false; //for altalt moon weather
     //public boolean superCharged = false; //for faraday field weather
     public Team originalTeam; //used when a player is taken away from their team out of the league
     public Player()
@@ -96,10 +96,10 @@ public class Player
     }
 
     public void recalculateBaseStats(){
-        this.batting = (density.value() + numberOfEyes.value() + focus.value() + malleability.value() + splash.value() + aggression.value() ) / 6;
-        this.pitching = (pinpointedness.value() + fun.value() + grit.value() + dimensions.value() + powder.value()) / 5;
-        this.baserunning = (hitPoints.value() + effort.value() + arrogance.value() + dexterity.value() ) / 4;
-        this.defense = (mathematics.value() + damage.value() + carcinization.value() + rejection.value() + wisdom.value() ) / 5;
+        this.batting = (density.baseValue() + numberOfEyes.baseValue() + focus.baseValue() + malleability.baseValue() + splash.baseValue() + aggression.baseValue() ) / 6;
+        this.pitching = (pinpointedness.baseValue() + fun.baseValue() + grit.baseValue() + dimensions.baseValue() + powder.baseValue()) / 5;
+        this.baserunning = (hitPoints.baseValue() + effort.baseValue() + arrogance.baseValue() + dexterity.baseValue() ) / 4;
+        this.defense = (mathematics.baseValue() + damage.baseValue() + carcinization.baseValue() + rejection.baseValue() + wisdom.baseValue() ) / 5;
     }
     
     public void clearTemporaryStats(){
@@ -126,6 +126,30 @@ public class Player
         recalculateBaseStats();
     }
     
+    void multiplyStats(double multiple){
+        aggression.multiplyBoost(multiple);
+        density.multiplyBoost(multiple);
+        focus.multiplyBoost(multiple);
+        malleability.multiplyBoost(multiple);
+        numberOfEyes.multiplyBoost(multiple);
+        splash.multiplyBoost(multiple);
+        dimensions.multiplyBoost(multiple);
+        fun.multiplyBoost(multiple);
+        grit.multiplyBoost(multiple);
+        pinpointedness.multiplyBoost(multiple);
+        powder.multiplyBoost(multiple);
+        arrogance.multiplyBoost(multiple);
+        dexterity.multiplyBoost(multiple);
+        effort.multiplyBoost(multiple);
+        hitPoints.multiplyBoost(multiple);
+        carcinization.multiplyBoost(multiple);
+        damage.multiplyBoost(multiple);
+        mathematics.multiplyBoost(multiple);
+        rejection.multiplyBoost(multiple);
+        wisdom.multiplyBoost(multiple);
+        recalculateBaseStats();
+    }
+    
     void boostBatting(double boost){
         aggression.addBoost(boost);
         density.addBoost(boost);
@@ -133,7 +157,6 @@ public class Player
         malleability.addBoost(boost);
         numberOfEyes.addBoost(boost);
         splash.addBoost(boost);
-
         recalculateBaseStats();
     }
     
@@ -199,6 +222,7 @@ public class Player
     }
     
     public void removeMod(String mod){
+        //System.out.println(mod);
         mods.remove(mod);
     }
     
@@ -290,7 +314,6 @@ public class Player
     public void printPlayer(int mode){
         System.out.println(name);
         printMods();
-        System.out.println("Elsewhere: " + elsewhere);
         printStats();
         System.out.println("Pregame Ritual  " + pregameRitual);
         System.out.println("Coffee Style    " + coffeeStyle);
@@ -312,7 +335,8 @@ public class Player
     }
     
     public String modDescription(String s){
-        //insert other cases here
+        if(s.equals("Cat"))
+            return "Meow.";
         return "This player is " + s + ".";
     }
     
@@ -333,64 +357,64 @@ public class Player
 
     public void printAdvancedStats(){
         System.out.print("Aggression      ");
-        printStat(aggression.value());
+        printStat(aggression.baseValue());
         System.out.println();
         System.out.print("Arrogance       ");
-        printStat(arrogance.value());
+        printStat(arrogance.baseValue());
         System.out.println();
         System.out.print("Carcinization   ");
-        printStat(carcinization.value());
+        printStat(carcinization.baseValue());
         System.out.println();
         System.out.print("Damage          ");
-        printStat(damage.value());
+        printStat(damage.baseValue());
         System.out.println();
         System.out.print("Density         ");
-        printStat(density.value());
+        printStat(density.baseValue());
         System.out.println();
         System.out.print("Dexterity       ");
-        printStat(dexterity.value());
+        printStat(dexterity.baseValue());
         System.out.println();
         System.out.print("Dimensions      ");
-        printStat(dimensions.value());
+        printStat(dimensions.baseValue());
         System.out.println();
         System.out.print("Effort          ");
-        printStat(effort.value());
+        printStat(effort.baseValue());
         System.out.println();
         System.out.print("Focus           ");
-        printStat(focus.value());
+        printStat(focus.baseValue());
         System.out.println();
         System.out.print("Fun             ");
-        printStat(fun.value());
+        printStat(fun.baseValue());
         System.out.println();
         System.out.print("Grit            ");
-        printStat(grit.value());
+        printStat(grit.baseValue());
         System.out.println();
         System.out.print("Hit Points      ");
-        printStat(hitPoints.value());
+        printStat(hitPoints.baseValue());
         System.out.println();
         System.out.print("Malleability    ");
-        printStat(malleability.value());
+        printStat(malleability.baseValue());
         System.out.println();
         System.out.print("Mathematics     ");
-        printStat(mathematics.value());
+        printStat(mathematics.baseValue());
         System.out.println();
         System.out.print("Number of Eyes  ");
-        printStat(numberOfEyes.value());
+        printStat(numberOfEyes.baseValue());
         System.out.println();
         System.out.print("Pinpointedness  ");
-        printStat(pinpointedness.value());
+        printStat(pinpointedness.baseValue());
         System.out.println();
         System.out.print("Powder          ");
-        printStat(powder.value());
+        printStat(powder.baseValue());
         System.out.println();
         System.out.print("Rejection       ");
-        printStat(rejection.value());
+        printStat(rejection.baseValue());
         System.out.println();
         System.out.print("Splash          ");
-        printStat(splash.value());
+        printStat(splash.baseValue());
         System.out.println();
         System.out.print("Wisdom          ");
-        printStat(wisdom.value());
+        printStat(wisdom.baseValue());
         System.out.println();
     }
 }

@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=Strikedown
+comment1.params=game
+comment1.target=Strikedown(Game)
+comment2.params=
+comment2.target=void\ beforeHalfInning()
+comment3.params=
+comment3.target=void\ beforePitch()
+comment4.params=baseNum
+comment4.target=void\ baseLeft(int)
+comment5.params=p
+comment5.target=void\ onScore(Player)
+numComments=6

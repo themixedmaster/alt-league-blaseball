@@ -71,7 +71,7 @@ public class Team
     public static int ablePlayers(Player[] players){
         int x = 0;
         for(Player p : players)
-            if(!p.elsewhere)
+            if(!p.hasMod("Elsewhere"))
                 x++;
         return x;
     }
