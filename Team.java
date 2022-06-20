@@ -67,7 +67,19 @@ public class Team
         }
         System.out.println();
     }
+<<<<<<< Updated upstream
 
+=======
+    
+    public static int ablePlayers(Player[] players){
+        int x = 0;
+        for(Player p : players)
+            if(!p.hasMod("Elsewhere"))
+                x++;
+        return x;
+    }
+    
+>>>>>>> Stashed changes
     public Player[] getActivePlayers(){
         Player[] players = new Player[lineup.length + rotation.length];
         for(int x = 0; x < lineup.length;x++){

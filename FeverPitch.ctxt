@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=FeverPitch
+comment1.params=game
+comment1.target=FeverPitch(Game)
+comment2.params=
+comment2.target=void\ beforeFullInning()
+comment3.params=
+comment3.target=void\ beforeHalfInning()
+comment4.params=
+comment4.target=void\ batterDeclared()
+comment5.params=
+comment5.target=void\ beforePitch()
+comment6.params=eyesRoll
+comment6.target=double\ alterEyesRoll(double)
+comment7.params=focusRoll
+comment7.target=double\ alterFocusRoll(double)
+comment8.params=runsScored
+comment8.target=double\ alterRunsScored(double)
+comment9.params=
+comment9.target=Player\ randomTarget()
+numComments=10

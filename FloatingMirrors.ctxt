@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=FloatingMirrors
+comment1.params=game
+comment1.target=FloatingMirrors(Game)
+comment2.params=
+comment2.target=void\ startOfGame()
+comment3.params=
+comment3.target=void\ beforePitch()
+comment4.params=
+comment4.target=void\ defenderDeclared()
+comment5.params=
+comment5.target=void\ afterHit()
+comment6.params=
+comment6.target=Player\ randomTarget()
+comment7.params=
+comment7.target=Player\ randomWeightedTarget()
+numComments=8

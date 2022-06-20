@@ -11,15 +11,25 @@ public class League
     public static Game[][] postseason3;
     public static ArrayList<Player> birdNest; /**the name of this array list is ILLEGAL KNOWLEDGE*/
     public static ArrayList<Player> deceased;
+<<<<<<< Updated upstream
     public static long seasonStartTime = 1653318000 * (long)1000;// - 3600000 *114;
+=======
+    public static long seasonStartTime = 1655737200 * (long)1000;// - 3600000 *114;
+>>>>>>> Stashed changes
     //public static long seasonStartTime = 1651503600 * (long)1000;// + 3600000 * (long)17;// - 60000 * (long)12;// - (long)(86400 * 1000 * 5) - (long)(3600 * 1000 * 22);
     public static int season = Integer.MIN_VALUE;
     static Random r;
     public static void resetLeague(){
+<<<<<<< Updated upstream
         recapVortex();
         //recapSeason3();
         r = new Random(Integer.MIN_VALUE);
         season = Integer.MIN_VALUE;
+=======
+        recapAltAlt4();
+        r = new Random(-5);
+        season = -5;
+>>>>>>> Stashed changes
         scheduleSeason(seasonStartTime);
         //Player[] god = new Player[1];
         //god[0] = new Player("God",10,10,10,10);

@@ -24,6 +24,7 @@ public class Game
     int strikes;
     int outs;
     long startTime;
+<<<<<<< Updated upstream
     long continueTime;
     boolean watching = false;
     boolean continueRunning = true;
@@ -39,13 +40,31 @@ public class Game
     long switchTime; //vortex
     int battingTeamBattingPosition;
     int pitchingTeamBattingPosition;
+=======
+    long currentTime;
+    ArrayList<Event> events;
+    Weather weather;
+    String weatherName;
+
+    int inning;
+    boolean top;
+
+    Team battingTeam;
+>>>>>>> Stashed changes
     Team pitchingTeam;
     Team battingTeam;
     Player pitcher;
     Player waitingPitcher;
     double runValue;
 
+<<<<<<< Updated upstream
     public Game(Team teamA, Team teamB, int dayNum, long startTime, int season){
+=======
+    Player[] bases;
+    
+    String gameName;
+    public Game(Team teamA, Team teamB, int dayNum, long startTime){
+>>>>>>> Stashed changes
         this.teamA = teamA;
         this.teamB = teamB;
         this.dayNum = dayNum;
@@ -53,6 +72,16 @@ public class Game
         this.season = season;
         weather = "Time Vortex";//randomAltWeather();
     }
+<<<<<<< Updated upstream
+=======
+    //code is currently in testing phase
+    public void simulateGame(){
+        r = new Random(dayNum * (long)Math.pow(teamA.favor,teamB.favor) + (long)Math.pow(teamB.favor,teamA.favor));
+        weather = randomWeather();
+        weatherName = weather.name;
+        gameName = weatherName + ", " + teamA.getTeamName() + " vs. " + teamB.getTeamName() + ", Day " + dayNum;
+        addEvent(teamA.getTeamName() + " vs. " + teamB.getTeamName(),0);
+>>>>>>> Stashed changes
 
     public void runGame(){
         madness = false;
@@ -129,6 +158,7 @@ public class Game
         battingTeam = teamB;
         pitcher = pitcherA;
         waitingPitcher = pitcherB;
+<<<<<<< Updated upstream
         battingTeamBattingPosition = 0;
         pitchingTeamBattingPosition = 0;
         sortAlphabetically(teamA.getActivePlayers());
@@ -272,12 +302,61 @@ public class Game
                             }else{
                                 printlnC(batter.name + " hit a ground out to " + outfielder.name + ".");
                             }
+=======
+
+        for(Player p : teamA.lineup){
+            p.addStatistic("Games played");
+        }
+        for(Player p : teamB.lineup){
+            p.addStatistic("Games played");
+        }
+        pitcherA.addStatistic("Games played");
+        pitcherB.addStatistic("Games played");
+
+        weather.startOfGame();
+        addEvent("Blay pall!",tick);
+        while(!endOfGame()){
+            if(top)
+                weather.beforeFullInning();
+            weather.beforeHalfInning();
+            String s;
+            if(top)
+                s = "Top";
+            else
+                s = "Bottom";
+            addEvent(s + " of " + inning + ", " + battingTeam.getTeamName() + " batting. " + pitcher.name + " pitching.",tick);
+            pitcher.addStatistic("Innings pitched");
+            clearBases();
+            baseStealOut = false;
+            while(!endOfInning()){
+                if(!baseStealOut)
+                    setNextBatter();
+                baseStealOut = false;
+                int x = 0;
+                while(!strikeout()){
+                    switch(x % 2){
+                        case 0:
+                            doSteals();
+                            break;
+                        case 1:
+                            weather.beforePitch();
+                            doPitch();
+                            weather.afterPitch();
+>>>>>>> Stashed changes
                             break;
                         }
                     }
                 }
+<<<<<<< Updated upstream
                 strikes = 0;
                 balls = 0;
+=======
+                if(!out){
+                    pitcher.addStatistic("Strikeouts");
+                    batter.addStatistic("Times struck out");
+                }
+                out = false;
+>>>>>>> Stashed changes
                 outs++;
                 if(outs < 4)
                     out();
@@ -301,6 +380,7 @@ public class Game
             Player temp2 = pitcher;
             pitcher = waitingPitcher;
             waitingPitcher = temp2;
+<<<<<<< Updated upstream
             int temp3 = battingTeamBattingPosition;
             battingTeamBattingPosition = pitchingTeamBattingPosition;
             pitchingTeamBattingPosition = temp3;
@@ -427,6 +507,29 @@ public class Game
             if(bases[x] != null && bases[x].fan){
                 printlnC("Rogue Umpire incinerated " + bases[x].name + "!");
             }
+=======
+            //switches out teams' batting positions
+            int temp3 = activeTeamBat;
+            activeTeamBat = inactiveTeamBat;
+            inactiveTeamBat = temp3;
+            if(endOfGame())
+                weather.beforeEndOfPlay();
+        }
+        addEvent(teamA.getName() + " " + scoreToString(scoreA) + ", " + teamB.getName() + " " + scoreToString(scoreB),tick);
+        giveWins();
+        clearGameEffects();
+        if(!teamAScored)
+            pitcherB.addStatistic("Shutouts");
+        if(!teamBScored)
+            pitcherA.addStatistic("Shutouts");
+        weather.endOfGame();
+        addEvent("\nGame over.",tick);
+    }
+
+    void clearGameEffects(){
+        for(Player p : activePlayers()){
+            p.clearTemporaryStats();
+>>>>>>> Stashed changes
         }
         bases = new Player[3];
         radianBases = new HashMap<Double,Player>();
@@ -485,6 +588,7 @@ public class Game
             normalStatChange();
     }
 
+<<<<<<< Updated upstream
     public void afterPitch(){
         if(weather.equals("Fever Pitch"))
             feverPitch();
@@ -494,6 +598,11 @@ public class Game
             electricStrike();
         else if(weather.equals("Space"))
             spaceOut();
+=======
+    //precondition: simulateGame() has been called already
+    public String gameName(){
+        return gameName;
+>>>>>>> Stashed changes
     }
 
     public void beforeHalfInning(){
@@ -510,6 +619,7 @@ public class Game
             popBubble();
     }
 
+<<<<<<< Updated upstream
     public void afterHalfInning(){
         if(weather.equals("Birds"))
             printBirdMessage();
@@ -524,15 +634,104 @@ public class Game
     public double getScoreA(){
         if(continueRunning){
             return scoreA;
+=======
+    void giveWins(){
+        Team winningTeam;
+        Team losingTeam;
+        if(scoreA > scoreB){
+            winningTeam = teamA;
+            losingTeam = teamB;
+            winsA++;
+            if(gameEffectsRecord()){
+                teamA.addWin();
+                teamB.lose();
+                pitcherA.addStatistic("Pitcher wins");
+            }
+        }else{
+            winningTeam = teamB;
+            losingTeam = teamA;
+            winsB++;
+            if(gameEffectsRecord()){
+                teamB.addWin();
+                teamA.lose();
+                pitcherB.addStatistic("Pitcher wins");
+            }
+        }
+        winsA = weather.alterWinsA(winsA);
+        winsB = weather.alterWinsA(winsB);
+        if(gameEffectsRecord()){
+            teamA.win(winsA);
+            teamB.win(winsB);
+>>>>>>> Stashed changes
         }
         return 0;
     }
 
+<<<<<<< Updated upstream
     public double getScoreB(){
         if(continueRunning){
             return scoreB;
         }
         return 0;
+=======
+    void stealAttempt(int baseNum){
+        defender = randomDefender();
+        double urge = r.nextDouble() * 10 + bases[baseNum].arrogance.value()/3 - defender.rejection.value()/3;
+        if(urge < 9.95)
+            return;
+        steal(baseNum);
+        doSteals();
+    }
+
+    void steal(int baseNum){
+        bases[baseNum].addStatistic("Base steal attempts");
+        if(defender == null)
+            defender = randomDefender();
+        double stealValue = r.nextDouble() * 10 + bases[baseNum].dexterity.value();
+        double defenseValue = r.nextDouble() * 10 + defender.wisdom.value();
+        if(stealValue > defenseValue){
+            weather.beforeBaseSteal(bases[baseNum]);
+            bases[baseNum].addStatistic("Bases stolen");
+            switch(baseNum){
+                case 0:
+                    addEvent(bases[baseNum].name + " steals second base!",tick);
+                    bases[baseNum].addStatistic("Second base stolen");
+                    break;
+                case 1:
+                    addEvent(bases[baseNum].name + " steals third base!",tick);
+                    bases[baseNum].addStatistic("Third base stolen");
+                    break;
+                default:
+                    addEvent(bases[baseNum].name + " steals home!",tick);
+                    bases[baseNum].addStatistic("Home stolen");
+                    score(bases[baseNum]);
+                    printScore();
+                    break;
+            }
+            if(baseNum < bases.length-1)
+                bases[baseNum+1] = bases[baseNum];
+            clearBase(baseNum);
+        }else{
+            bases[baseNum].addStatistic("Caught stealing");
+            switch(baseNum){
+                case 0:
+                    addEvent(bases[baseNum].name + " gets caught stealing second base.",tick);
+                    bases[baseNum].addStatistic("Caught stealing second base");
+                    break;
+                case 1:
+                    addEvent(bases[baseNum].name + " gets caught stealing third base.",tick);
+                    bases[baseNum].addStatistic("Caught stealing third base");
+                    break;
+                default:
+                    addEvent(bases[baseNum].name + " gets caught stealing home.",tick);
+                    bases[baseNum].addStatistic("Caught stealing home");
+                    break;
+            }
+            out = true;
+            baseStealOut = true;
+            clearBase(baseNum);
+        }
+>>>>>>> Stashed changes
     }
 
     public Team getWinner(){
@@ -545,6 +744,7 @@ public class Game
         return null;
     }
 
+<<<<<<< Updated upstream
     public void score(Player p){
         if(!p.fan && !weather.equals("Bubble"))
             printlnInstantC(p.name + " scores!");
@@ -563,10 +763,54 @@ public class Game
                 }else{
                     printlnC(p.name + " scores against Favour! 1 unrun scored!");
                     scoreB--;
+=======
+    void doPitch(){
+        double pitchValue = r.nextDouble() * 10 + pitcher.pinpointedness.value();
+        double batValue = r.nextDouble() * 5 + batter.density.baseValue();//density can't be temp boosted
+        pitcher.addStatistic("Pitches thrown");
+        batter.addStatistic("Times pitched to");
+        if(batValue > pitchValue){
+            pitcher.addStatistic("Balls thrown");
+            pitcher.addStatistic("Balls received");
+            ball();
+            weather.afterBall();
+        }else{
+            boolean struck = false;
+            pitchValue = r.nextDouble() * 10 + pitcher.fun.value();
+            batValue = r.nextDouble() * 10 + batter.numberOfEyes.value();
+            batValue = weather.alterEyesRoll(batValue);
+            if(batValue <= pitchValue){
+                pitchValue = r.nextDouble() * 10 + pitcher.grit.value();
+                batValue = r.nextDouble() * 10 + batter.focus.value();
+                if(batValue <= pitchValue){
+                    strikes++;
+                    struck = true;
+                    batter.addStatistic("Strikes");
+                    batter.addStatistic("Looking strikes");
+                    if(strikeout())
+                        addEvent(batter.name + " strikes out looking.",tick);
+                    else
+                        addEvent("Strike, looking. " + bs(),tick);
+                    return;
+                }else{
+                    pitchValue = r.nextDouble() * 10 + pitcher.dimensions.value();
+                    batValue = r.nextDouble() * 10 + batter.malleability.value();
+                    if(batValue <= pitchValue){
+                        strikes++;
+                        batter.addStatistic("Strikes");
+                        batter.addStatistic("Swinging strikes");
+                        if(strikeout())
+                            addEvent(batter.name + " strikes out swinging.",tick);
+                        else
+                            addEvent("Strike, swinging. " + bs(),tick);
+                        return;
+                    }
+>>>>>>> Stashed changes
                 }
             }else{
                 scoreB++;
             }
+<<<<<<< Updated upstream
             if(scoreB >= 10 && weather.equals("Sun 2")){
                 printlnC("The " + teamB.name + " collect 10!" +
                     "\nSun 2 smiles.");
@@ -594,6 +838,80 @@ public class Game
                 }else{
                     printlnC(p.name + " scores against Favour! 1 unrun scored!");
                     scoreA--;
+=======
+            if(!strikeout() || batter.hasMod("Persistent")){
+                batter.removeMod("Persistent");
+                pitchValue = r.nextDouble() * 10 + pitcher.powder.value();
+                batValue = r.nextDouble() * 10 + batter.splash.value();
+                if(batValue <= pitchValue){
+                    strikes++;
+                    batter.addStatistic("Strikes");
+                    while(overStrikeLimit()){
+                        strikes--;
+                        batter.addStatistic("Strikes",-1);
+                    }
+                    addEvent("Foul ball. " + bs(),tick);
+                    batter.addStatistic("Foul balls hit");
+                    pitcher.addStatistic("Foul balls pitched");
+                }else{
+                    defender = randomDefender();
+                    weather.defenderDeclared();
+                    batValue = r.nextDouble() * 10 + batter.aggression.value();
+                    double defenseValue = r.nextDouble() * 10 + defender.mathematics.value();
+                    if(batValue <= defenseValue){
+                        out = true;
+                        addEvent(batter.name + " hit a flyout to " + defender.name + ".",tick);
+                        batter.addStatistic("Flyouts hit");
+                        defender.addStatistic("Flyouts caught");
+                    }else{
+                        batValue = r.nextDouble() * 10 + batter.hitPoints.value();
+                        defenseValue = r.nextDouble() * 10 + defender.damage.value();
+                        if(batValue <= defenseValue){
+                            out = true;
+                            addEvent(batter.name + " hit a ground out to " + defender.name + ".",tick);
+                            batter.addStatistic("Ground outs hit");
+                            defender.addStatistic("Ground outs fielded");
+                        }else{
+                            batter.addStatistic("Hits");
+                            int basesRun = 0;
+                            double baseDifficulty = 0;
+                            do{
+                                batValue = r.nextDouble() * 10 + batter.effort.value();
+                                defenseValue = r.nextDouble() * 10 + defender.carcinization.value() + baseDifficulty;
+                                basesRun++;
+                                baseDifficulty+=0.1;
+                            }while(batValue > defenseValue);
+                            basesRun = weather.alterBasesRun(basesRun);
+                            switch(basesRun){
+                                case 1:
+                                    addEvent(batter.name + " hits a Single!",tick);
+                                    batter.addStatistic("Singles hit");
+                                    pitcher.addStatistic("Singles allowed");
+                                    break;
+                                case 2:
+                                    addEvent(batter.name + " hits a Double!",tick);
+                                    batter.addStatistic("Doubles hit");
+                                    pitcher.addStatistic("Doubles allowed");
+                                    break;
+                                case 3:
+                                    addEvent(batter.name + " hits a Triple!",tick);
+                                    batter.addStatistic("Triples hit");
+                                    pitcher.addStatistic("Triples allowed");
+                                    break;
+                                default:
+                                    addEvent(batter.name + " hits a Home run!",tick);
+                                    batter.addStatistic("Home runs hit");
+                                    pitcher.addStatistic("Home runs allowed");
+                                    break;
+                            }
+                            weather.afterHit();
+                            if(basesRun >= 4)
+                                weather.afterHomeRun();
+                            advanceBaserunners(basesRun);
+                            setNextBatter();
+                        }
+                    }
+>>>>>>> Stashed changes
                 }
             }else{
                 scoreA++;
@@ -645,11 +963,16 @@ public class Game
                     return;
                 if(x + baseRun >= bases.length){
                     score(bases[x]);
-                    bases[x] = null;
+                    clearBase(x);
                     scored = true;
                 }else{
+<<<<<<< Updated upstream
                     bases[x+baseRun] = bases[x];
                     bases[x] = null;
+=======
+                    bases[x+basesRun] = bases[x];
+                    clearBase(x);
+>>>>>>> Stashed changes
                 }
                 for(int y = 0; y < baseRun; y++){
                     if(x+y >= bases.length - 1)
@@ -703,12 +1026,23 @@ public class Game
         }
     }
 
+<<<<<<< Updated upstream
     boolean canAdvanceExtra(int base, int basesRun){
         if(base + basesRun + 1 >= bases.length)
             return true;
         if(bases[base + basesRun] == null)
             return true;
         return false;
+=======
+    void clearBase(int baseNum){
+        weather.baseLeft(baseNum);
+        bases[baseNum] = null;
+    }
+
+    Player randomDefender(){
+        Player[] players = pitchingTeam.lineup;
+        return players[(int)(r.nextDouble() * players.length)];
+>>>>>>> Stashed changes
     }
 
     String getBaseName(int base){
@@ -735,7 +1069,50 @@ public class Game
         return true;
     }
 
+<<<<<<< Updated upstream
+=======
+    boolean strikeout(){
+        return weather.alterStrikeout(overStrikeLimit() || out);
+    }
+    
+    boolean overStrikeLimit(){
+        return strikes >= 3;
+    }
+
+    String bs(){ //balls strikes
+        String b = "" + balls;
+        String s = "" + strikes;
+        if(balls < 0)
+            b = "(-" + b + ")";
+        if(strikes < 0)
+            s = "(-" + s + ")";
+        return b + "-" + s;
+    }
+
+    void clearBases(){
+        if(bases != null){
+            for(int x = 0; x < bases.length; x++)
+                if(bases[x] != null)
+                    clearBase(x);
+        }else
+            bases = new Player[3];
+    }
+
+    void ball(){
+        balls++;
+        if(weather.alterWalk(balls >= 4) && !batter.hasMod("Stubbed Toe")){
+            addEvent(batter.walkMessage(),tick);
+            batter.addStatistic("Walks");
+            pitcher.addStatistic("Walks allowed");
+            walk();
+            setNextBatter();
+        }else
+            addEvent("Ball. " + balls + "-" + strikes,tick);
+    }
+
+>>>>>>> Stashed changes
     void walk(){
+        weather.beforeWalk();
         boolean scored = false;
         Player moving = batter;
         for(int x = 0; x < bases.length; x++){
@@ -755,6 +1132,7 @@ public class Game
         if(scored){
             printScore();
         }
+        weather.afterWalk();
     }
 
     void printScore(){
@@ -772,10 +1150,21 @@ public class Game
         return s;
     }
 
+<<<<<<< Updated upstream
     public String cloud(String input){
         String s = "";
         for(int x = 0; x < input.length(); x++){
             s+="☁";
+=======
+    void score(Player p){
+        double runsScored = weather.alterRunsScored(1);
+        if(top){
+            scoreB+=runsScored;
+            teamBScored = true;
+        }else{
+            scoreA+=runsScored;
+            teamAScored = true;
+>>>>>>> Stashed changes
         }
         return s;
     }
@@ -794,11 +1183,29 @@ public class Game
             println(message);
     }
 
+<<<<<<< Updated upstream
     void printInstantC(String message){
         if(weather.equals("Cloudy") && r.nextDouble() <= 0.3)
             printInstant(cloud(message));
         else
             printInstant(message);
+=======
+    //sets the next batter unless the inning is about to end
+    void setNextBatter(){
+        if(endOfInning() || (batter != null && batter.hasMod("Persistent")))
+            return;
+        strikes = 0;
+        balls = 0;
+        do{
+            activeTeamBat++;
+            batter = battingTeam.lineup[(activeTeamBat-1) % battingTeam.lineup.length];
+            if(batter.hasMod("Elsewhere"))
+                weather.batterElsewhere();
+        }while(batter.hasMod("Elsewhere"));
+        addEvent(batter.batMessage(battingTeam),tick);
+        batter.addStatistic("Plate appearences");
+        weather.batterDeclared();
+>>>>>>> Stashed changes
     }
 
     void printlnInstantC(String message){
@@ -815,6 +1222,7 @@ public class Game
         }
     }
 
+<<<<<<< Updated upstream
     void println(String message){
         wait(frameTime);
         if(watching){
@@ -826,6 +1234,18 @@ public class Game
         if(watching){
             System.out.print(message);
         }
+=======
+    void addEvent(String s, int tick){
+        addEvent(s,tick,false);
+    }
+
+    void addEvent(String s, int tick, boolean special){
+        currentTime+=tick;
+        weather.beforeAddEvent();
+        events.add(new Event(s,currentTime,special));
+        //if(currentTime > startTime + 3600000)
+            //System.out.println(s);
+>>>>>>> Stashed changes
     }
 
     public void printlnInstant(String message){
@@ -844,6 +1264,7 @@ public class Game
         }
     }
 
+<<<<<<< Updated upstream
     public String gameName(){
         if(season < 3 && season > -2)//change to 3 before release
             return teamA.getTeamName() + " vs. " + teamB.getTeamName();
@@ -871,6 +1292,14 @@ public class Game
         //System.out.println(dayNum * season * teamA.favor * teamB.favor);
         int rand = (int)(r.nextDouble() * 6);
         //System.out.println((dayNum * season * teamA.favor * teamB.favor) + " " + rand);
+=======
+    int numberOfWeathers(){
+        return 14;
+    }
+    
+    Weather randomWeather(){
+        int rand = (int)(r.nextDouble() * numberOfWeathers());
+>>>>>>> Stashed changes
         switch(rand){
             case 0:
                 return "Birds";
@@ -881,11 +1310,33 @@ public class Game
             case 3:
                 return "Black Hole";
             case 4:
+<<<<<<< Updated upstream
                 return "Unsun";
             case 5:
                 return "Reverse";
             default:
                 return "";
+=======
+                return new Crabs(this);
+            case 5:
+                return new FloatingMirrors(this);
+            case 6:
+                return new Rain(this);
+            case 7:
+                return new Distortion(this);
+            case 8:
+                return new Growth(this);
+            case 9:
+                return new FeverPitch(this);
+            case 10:
+                return new Multiball(this);
+            case 11:
+                return new NormalizedWeather(this);
+            case 12:
+                return new NamedWeather(this);
+            case 13:
+                return new Brisk(this);
+>>>>>>> Stashed changes
         }
     }
 

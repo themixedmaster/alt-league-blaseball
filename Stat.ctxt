@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.target=Stat
+comment1.params=baseValue
+comment1.target=Stat(double)
+comment10.params=
+comment10.target=void\ removeBoost()
+comment2.params=baseValue
+comment2.target=void\ setBaseValue(double)
+comment3.params=value
+comment3.target=void\ setTemporary(double)
+comment4.params=
+comment4.target=double\ value()
+comment5.params=boost
+comment5.target=void\ permanentIncrease(double)
+comment6.params=multiple
+comment6.target=void\ permanentMultiply(double)
+comment7.params=multiple
+comment7.target=void\ multiplyBoost(double)
+comment8.params=boost
+comment8.target=void\ addBoost(double)
+comment9.params=
+comment9.target=double\ baseValue()
+numComments=11

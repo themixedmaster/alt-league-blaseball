@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Multiball
+comment1.params=game
+comment1.target=Multiball(Game)
+comment2.params=
+comment2.target=void\ beforePitch()
+comment3.params=
+comment3.target=void\ afterPitch()
+comment4.params=isStrikeout
+comment4.target=boolean\ alterStrikeout(boolean)
+numComments=5

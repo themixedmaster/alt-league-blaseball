@@ -130,6 +130,7 @@ public class GameTester
                 case 2:
                     System.out.println("Election results:\n");
                     System.out.println("Shadow decrees:");
+<<<<<<< Updated upstream
                     System.out.println("  Telescope(Telescope) - THE TIMELESS BATTLE BE WITNESSED.");
                     System.out.println("  Temporal Assertion - Several Weathers have been temporally altered.");
                     System.out.println("    Meownsoon has been temporally revoked.");
@@ -141,6 +142,12 @@ public class GameTester
                     System.out.println("BIRD: Hope you've been enjoying the Alt(Alt) League.");
                     System.out.println("BIRD: I found a telescope.");
                     System.out.println("BIRD: Let's look through it.");
+=======
+                    System.out.println("  Skipping - TIMELINE RETRACTED. PLAYERS RESTORED");
+                    System.out.println("\nPost Election:\n");
+                    System.out.println("BIRD: [BIRD NOISES]");
+                    System.out.println("BIRD: Oh look, more weathers.");
+>>>>>>> Stashed changes
                     System.out.println("BIRD: [BIRD NOISES]");
                     System.out.println("Alt(Alt) League Blaseball will return.");
                     System.out.println("Alt League Blaseball will return.");

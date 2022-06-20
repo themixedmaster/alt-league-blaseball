@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=Meownsoon
+comment1.params=game
+comment1.target=Meownsoon(Game)
+comment2.params=p
+comment2.target=void\ eatFood(Player)
+comment3.params=
+comment3.target=void\ beforeHalfInning()
+comment4.params=
+comment4.target=void\ beforePitch()
+comment5.params=
+comment5.target=void\ endOfGame()
+numComments=6
