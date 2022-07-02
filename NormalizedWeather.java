@@ -73,9 +73,9 @@ public class NormalizedWeather extends Weather
     }
     
     public void beforePitch(){
-        if(r.nextDouble() > 0.02)
+        if(game.r.nextDouble() > 0.02)
             return;
-        int rand = (int)(r.nextDouble() * 6);
+        int rand = (int)(game.r.nextDouble() * 6);
         switch(rand){
             case 0:
                 game.addEvent("An air-conditioned breeze drifts over the AstroTurf.");
@@ -84,7 +84,7 @@ public class NormalizedWeather extends Weather
                 game.addEvent("The " + game.teamA.getTeamName() + " consider altering the humidity of the air conditioning, but decide against it.");
                 break;
             case 2:
-                rand = (int)(r.nextDouble() * 3);
+                rand = (int)(game.r.nextDouble() * 3);
                 String weather;
                 switch(rand){
                     case 0:

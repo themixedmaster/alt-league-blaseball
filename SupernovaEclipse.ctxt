@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=SupernovaEclipse
+comment1.params=game
+comment1.target=SupernovaEclipse(Game)
+comment2.params=
+comment2.target=void\ beforePitch()
+comment3.params=
+comment3.target=Team\ getReplacementTeam()
+numComments=4

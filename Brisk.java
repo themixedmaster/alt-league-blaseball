@@ -19,9 +19,9 @@ public class Brisk extends Weather
     }
     
     public void beforeBaseSteal(Player p){
-        if(r.nextDouble() > 0.6)
+        if(game.r.nextDouble() > 0.6)
             return;
-        int rand = (int)(r.nextDouble() * 3);
+        int rand = (int)(game.r.nextDouble() * 3);
         switch(rand){
             case 0:
                 game.addEvent(p.name + " steals a base at a slow pace!");
@@ -36,13 +36,13 @@ public class Brisk extends Weather
     }
     
     public void beforePitch(){
-        if(r.nextDouble() > 0.1)
+        if(game.r.nextDouble() > 0.1)
             return;
         int rand;
         if(game.weather instanceof PulsarPulsar)
-            rand = (int)(r.nextDouble() * 18);
+            rand = (int)(game.r.nextDouble() * 18);
         else
-            rand = (int)(r.nextDouble() * 11);
+            rand = (int)(game.r.nextDouble() * 11);
         switch(rand){
             case 0:
                 game.addEvent("What a nice day!");
@@ -102,7 +102,7 @@ public class Brisk extends Weather
     }
     
     public void beforeWalk(){
-        if(r.nextDouble() > 0.15)
+        if(game.r.nextDouble() > 0.15)
             return;
         game.addEvent(game.batter.name + " feels energized by the crisp air and takes an extra base in their walk!");
         doubleWalk = true;
@@ -110,7 +110,7 @@ public class Brisk extends Weather
 
     public void afterWalk(){
         Player stubbed = null;
-        if(r.nextDouble() <= 0.1)
+        if(game.r.nextDouble() <= 0.1)
             stubbed = game.bases[0];
         if(doubleWalk){
             doubleWalk = false;
@@ -136,7 +136,7 @@ public class Brisk extends Weather
                 game.printScore();
             }
         }
-        if(r.nextDouble() <= 0.1){
+        if(game.r.nextDouble() <= 0.1){
             Player p = game.bases[0];
             if(p != null){
                 game.addEvent("A cold wind buffets " + p.name + "!  Their legs shake and move!  " + p.name + " walks until they’re just a spot on the horizon.");
@@ -151,9 +151,9 @@ public class Brisk extends Weather
     }
 
     public void scoreOnWalk(Player p){
-        if(r.nextDouble() > 0.6)
+        if(game.r.nextDouble() > 0.6)
             return;
-        int rand = (int)(r.nextDouble() * 4);
+        int rand = (int)(game.r.nextDouble() * 4);
         switch(rand){
             case 0:
                 game.addEvent(p.name + " speedwalks home!");
@@ -171,9 +171,9 @@ public class Brisk extends Weather
     }
     
     public void afterHomeRun(){
-        if(r.nextDouble() > 0.6)
+        if(game.r.nextDouble() > 0.6)
             return;
-        int rand = (int)(r.nextDouble() * 4);
+        int rand = (int)(game.r.nextDouble() * 4);
         switch(rand){
             case 0:
                 game.addEvent(game.batter.name + " smugly walks around the bases!");

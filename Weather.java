@@ -21,6 +21,10 @@ public class Weather
         
     }
     
+    public String alterEvent(String event){
+        return event;
+    }
+    
     public void beforeFullInning(){
         
     }

@@ -19,10 +19,10 @@ public class Growth extends Weather
     }
     
     public void beforePitch(){
-        if(r.nextDouble() > 0.00025)
+        if(game.r.nextDouble() > 0.00025)
             return;
         Player p = new Player();
-        int rand = (int)(r.nextDouble() * 2);
+        int rand = (int)(game.r.nextDouble() * 2);
         Team t;
         switch(rand){
             case 0:
@@ -37,7 +37,7 @@ public class Growth extends Weather
         game.addEvent("GROWING");
         game.addEvent(p.name.toUpperCase() + " ADVANCES ONTO THE " + t.getTeamName().toUpperCase(),true);
         p.addStatistic("Joined team through growth");
-        rand = (int)(r.nextDouble() * 4);
+        rand = (int)(game.r.nextDouble() * 4);
         Player[] players;
         switch(rand){
             case 0: case 1: case 2:

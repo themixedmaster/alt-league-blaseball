@@ -16,15 +16,20 @@ public class League
     //public static long seasonStartTime = 1651503600 * (long)1000;// + 3600000 * (long)17;// - 60000 * (long)12;// - (long)(86400 * 1000 * 5) - (long)(3600 * 1000 * 22);
     public static int season;
     public static int nextID;
+    public static int nextTeamID;
     static Random r;
+    
+    public static ArrayList<Team> replacementTeams;
     public static void resetLeague(){
-        recapAltAlt4();
+        //recapAltAlt4();
+        nextID = 0;
+        nextTeamID = 0;
         r = new Random(-5);
+        JSONLoader.loadLeagueFromJSON(5);
+        setReplacementTeams();
+        
         season = -5;
         scheduleSeason(seasonStartTime);
-        nextID = 0;
-        //Player[] god = new Player[1];
-        //god[0] = new Player("God",10,10,10,10);
     }
 
     public static int nextID(){
@@ -32,65 +37,71 @@ public class League
         nextID++;
         return i;
     }
-
-    public static void runPostseason(){
-        runPostseason(getGameDay());
-    }
-
-    public static void runPostseason(int day){
-        if(day >= 100){
-            runAllGames();
-            schedulePostseason1();
-            runAllPostseason1Games();
-        }
-        if(day >= 105){
-            schedulePostseason2();
-            runAllPostseason2Games();
-        }
-        if(day >= 110){
-            schedulePostseason3();
-            runAllPostseason3Games();
-        }
+    
+    public static int nextTeamID(){
+        int i = nextTeamID;
+        nextTeamID++;
+        return i;
     }
 
     public static ArrayList<Game> getAllGames(){
         return allGames;
     }
+    
+    public static ArrayList<Game> allScheduledGames(){
+        ArrayList scheduledGames = new ArrayList<Game>();
+        for(Game[] games : seasonGames)
+            for(Game game : games)
+                scheduledGames.add(game);
+        if(postseason1 == null)
+            return scheduledGames;
+        for(Game[] games : postseason1)
+            for(Game game : games)
+            scheduledGames.add(game);
+        if(postseason2 == null)
+            return scheduledGames;
+        for(Game[] games : postseason2)
+            for(Game game : games)
+            scheduledGames.add(game);
+        if(postseason3 == null)
+            return scheduledGames;
+        for(Game[] games : postseason3)
+            for(Game game : games)
+            scheduledGames.add(game);
+        return scheduledGames;
+    }
 
     public static void runGamesUpToDate(){
         allGames = new ArrayList<Game>();
         int day = getGameDay();
+        long time = System.currentTimeMillis();
         for(Game[] games : seasonGames)
-            for(Game game : games)
-                if(game.dayNum < day){
-                    game.simulateGame();
-                    allGames.add(game);
-                }
+            for(Game game : games){
+                game.simulateGame(time);
+                allGames.add(game);
+            }
         if(day >= 100){
             schedulePostseason1();
             for(Game[] games : postseason1)
-                for(Game game : games)
-                    if(game.dayNum < day){
-                        game.simulateGame();
-                        allGames.add(game);
-                    }
+                for(Game game : games){
+                    game.simulateGame(time);
+                    allGames.add(game);
+                }
             if(day >= 105){
                 schedulePostseason2();
                 for(Game[] games : postseason2)
-                    for(Game game : games)
-                        if(game.dayNum < day){
-                            game.simulateGame();
-                            allGames.add(game);
-                        }
+                    for(Game game : games){
+                        game.simulateGame(time);
+                        allGames.add(game);
+                    }
             }
             if(day >= 110){
                 schedulePostseason3();
                 for(Game[] games : postseason3)
-                    for(Game game : games)
-                        if(game.dayNum < day){
-                            game.simulateGame();
-                            allGames.add(game);
-                        }
+                    for(Game game : games){
+                        game.simulateGame(time);
+                        allGames.add(game);
+                    }
             }
         }
     }
@@ -100,37 +111,27 @@ public class League
         int day = getGameDay();
         for(Game[] games : seasonGames)
             for(Game game : games){
-                game.simulateGame();
+                game.simulateGame(Long.MAX_VALUE);
                 allGames.add(game);
             }
         schedulePostseason1();
         for(Game[] games : postseason1)
             for(Game game : games){
-                game.simulateGame();
+                game.simulateGame(Long.MAX_VALUE);
                 allGames.add(game);
             }
         schedulePostseason2();
         for(Game[] games : postseason2)
             for(Game game : games){
-                game.simulateGame();
+                game.simulateGame(Long.MAX_VALUE);
                 allGames.add(game);
             }
         schedulePostseason3();
         for(Game[] games : postseason3)
             for(Game game : games){
-                game.simulateGame();
+                game.simulateGame(Long.MAX_VALUE);
                 allGames.add(game);
             }
-    }
-
-    public static void runGamesUpToDay(int day){
-        for(Game[] games : seasonGames)
-            for(Game game : games)
-                for(int x = 0; x < day; x++){
-                    for(Game g : getCurrentGames(x))
-                    //g.RunGame();
-                        g.simulateGame();
-                }
     }
 
     public static void sortLeague(){
@@ -472,49 +473,6 @@ public class League
         return players;
     }
 
-    /*public static void runAllGames(){
-        for(Game[] games : seasonGames){
-            for(Game game : games){
-                game.simulateGame();
-            }
-        }
-    }*/
-
-    public static void runAllPostseason1Games(){
-        for(Game[] games : postseason1){
-            for(Game game : games){
-                game.simulateGame();
-            }
-        }
-    }
-
-    public static void runAllPostseason2Games(){
-        for(Game[] games : postseason2){
-            for(Game game : games){
-                game.simulateGame();
-            }
-        }
-    }
-
-    public static void runAllPostseason3Games(){
-        for(Game[] games : postseason3){
-            for(Game game : games){
-                game.simulateGame();
-            }
-        }
-    }
-
-    public static Game[][] getGames(int season){
-        scheduleSeason(season);
-        runAllGames();
-        runPostseason(114);
-        Game[][] games = new Game[114][];
-        for(int x = 0; x < games.length; x++){
-            games[x] = getCurrentGames(x+1);
-        }
-        return games;
-    }
-
     public static void recapSeason0(){
         r = new Random(1);//IMPORTANT: Change to 1 before publishing!!
         ultraDark = new Team[6];
@@ -853,5 +811,126 @@ public class League
         birdNest = new ArrayList<Player>();
         deceased = new ArrayList<Player>();
 
+    }
+    
+    public static void setReplacementTeams(){
+        replacementTeams = new ArrayList<Team>();
+        replacementTeams.add(new Team("Fish","Florda","🐟",1,"FLF"));
+        replacementTeams.add(new Team("Big Lizards","Norcal","🦕",2,"NOR"));
+        replacementTeams.add(new Team("Crosses","Nottingham","❌",3,"NOT"));
+        replacementTeams.add(new Team("Scouts","SpringField","⛺",4,"SCT"));
+        replacementTeams.add(new Team("Council","High Avian","🐦",5,"HAC"));
+        replacementTeams.add(new Team("Ice Caps","Polar","🧢",6,"PIC"));
+        replacementTeams.add(new Team("Dreamers","Soul City","🛌",7,"SCD"));
+        replacementTeams.add(new Team("Skeletons","Sendai","💀",8,"SEN"));
+        replacementTeams.add(new Team("Jokers","Sacramento","🃏",9,"SCR"));
+        replacementTeams.add(new Team("Fitted Sheets","Las Vegas","🛏",10,"VGS"));
+        replacementTeams.add(new Team("Shadows","Jakarta","⚫",11,"JKR"));
+        replacementTeams.add(new Team("Cups","Melbourne","☕",12,"CUP"));
+        replacementTeams.add(new Team("Null Team","","❓",13,"NUL"));
+        replacementTeams.add(new Team("Specters","Dublin","👻",14,"DBN"));
+        replacementTeams.add(new Team("Consortiums","Unicode","☻",15,"UNI"));
+        replacementTeams.add(new Team("Bulls","Pamplona","🐂",16,"PMP"));
+        replacementTeams.add(new Team("Pharaohs","Tórshavn","🐫",17,"TRS"));
+        replacementTeams.add(new Team("Connectors","Cardiff","4️⃣",18,"CRD"));
+        replacementTeams.add(new Team("Pierogies","Pittsburgh","🥟",19,"PTS"));
+        replacementTeams.add(new Team("Funks","Uptown","📼",20,"UPT"));
+        replacementTeams.add(new Team("Eyes","London","👀",21,"EYE"));
+        replacementTeams.add(new Team("Tulips","Springfield","🌷",22,"TLP"));
+        replacementTeams.add(new Team("Alternates","Ankara","🕴",23,"ALT"));
+        replacementTeams.add(new Team("Surfers","Detroit","🏄",24,"DTR"));
+        replacementTeams.add(new Team("Soli","Prague","🎼",25,"PRG"));
+        replacementTeams.add(new Team("Rovers","Mars","🐶",26,"MRS"));
+        replacementTeams.add(new Team("Crabs","Baltimore","🦀",27,"BAL"));
+        replacementTeams.add(new Team("Pawns","St Louis","♟",28,"SLP"));
+        replacementTeams.add(new Team("Glolfers","Hilton Head Island","⛳",29,"HHI"));
+        replacementTeams.add(new Team("Wasted Potential","Yugoslavia","🚮",30,"YWP"));
+        replacementTeams.add(new Team("Perennials","Toronto","🌼",31,"TOR"));
+        replacementTeams.add(new Team("Moonmen","New Mexico","👽",32,"NMM"));
+        replacementTeams.add(new Team("Clones","Colorado","💾",33,"COL"));
+        replacementTeams.add(new Team("Charmers","Carolina","🍯",34,"CRL"));
+        replacementTeams.add(new Team("Pastries","Overpass","🥐",35,"OVR"));
+        replacementTeams.add(new Team("Sledgehammers","Pasadena","🔨",36,"PSD"));
+        replacementTeams.add(new Team("Muffins","Milan","🧁",37,"MLN"));
+        replacementTeams.add(new Team("Kings","Maximus","👑",38,"MAX"));
+        replacementTeams.add(new Team("Suits","New York New York","🕴",39,"ÑÑS"));
+        replacementTeams.add(new Team("Urns","Uruguay","⚱",40,"URN"));
+        replacementTeams.add(new Team("Stargazers","Loyola","🌌",41,"LOY"));
+        replacementTeams.add(new Team("Extras","Fill-in","☎",42,"FIL"));
+        replacementTeams.add(new Team("Firefighters","Chicago","🔥",43,"CHI"));
+        replacementTeams.add(new Team("Lift","Tokyo","🏋️‍",44,"TKL"));
+        replacementTeams.add(new Team("Tigers","Hades","🐅",45,"HAD"));
+        replacementTeams.add(new Team("Jazz Hands","Breckenridge","👐",46,"BRK"));
+        replacementTeams.add(new Team("Wild Wings","Mexico City","🍗",47,"MXC"));
+        replacementTeams.add(new Team("Georgias","Atlantis","🔱",48,"ATL"));
+        replacementTeams.add(new Team("Flowers","Boston","🌹",49,"BOS"));
+        replacementTeams.add(new Team("Tacos","LA Unlimited","🌮",50,"LAU"));
+        replacementTeams.add(new Team("Sunbeams","Hellmouth","🌞",51,"HEL"));
+        replacementTeams.add(new Team("Spies","Houston","🕵",52,"HST"));
+        replacementTeams.add(new Team("Dale","Miami","🚤",53,"MIA"));
+        replacementTeams.add(new Team("Worms","Ohio","🐌",54,"OHO"));
+        replacementTeams.add(new Team("Pies","Philly","🥧",55,"PHL"));
+        replacementTeams.add(new Team("Steaks","Dallas","🥩",56,"DLS"));
+        replacementTeams.add(new Team("Lovers","San Francisco","💋",57,"SFR"));
+        replacementTeams.add(new Team("Millennials","New York","📱",58,"NYM"));
+        replacementTeams.add(new Team("Garages","Seattle","🎸",59,"SEA"));
+        replacementTeams.add(new Team("Mechanics","Core","🛠",60,"COR"));
+        replacementTeams.add(new Team("Magic","Yellowstone","✨",61,"YLW"));
+        replacementTeams.add(new Team("Shoe Thieves","Charleston","👟",62,"CHR"));
+        replacementTeams.add(new Team("Fridays","Hawai'i","🏝",63,"HWI"));
+        replacementTeams.add(new Team("Breath Mints","Kansas City","🍬",64,"TBM"));
+        replacementTeams.add(new Team("Moist Talkers","Canada","🗣",65,"CMT"));
+        replacementTeams.add(new Team("Crabs","Baltimore","🦀",66,"BAL"));
+        replacementTeams.add(new Team("Latte","Atlético","🏆",67,"ATL"));
+        replacementTeams.add(new Team("Crew","Cold Brew","❄",68,"CLD"));
+        replacementTeams.add(new Team("United","Cream & Sugar","🤝",69,"C&S"));
+        replacementTeams.add(new Team("Data Witches","Society","🔮",70,"SIBR"));
+        replacementTeams.add(new Team("PoS","Royal","👑",71,"RYL"));
+        replacementTeams.add(new Team("Society","Milk Proxy","🥛",72,"MPS"));
+        replacementTeams.add(new Team("FWXBC","","🏳",73,"FWX"));
+        replacementTeams.add(new Team("Artists","Pandemonium","🎨?",74,"PAN"));
+        replacementTeams.add(new Team("Game Band","Real","🕹",75,"RGB"));
+        replacementTeams.add(new Team("City","Macchiato","🌃",76,"MAC"));
+        replacementTeams.add(new Team("Calf","Club de","🐮?",77,"CDC"));
+        replacementTeams.add(new Team("Electric Co.","Light & Sweet","💡",78,"L&S"));
+        replacementTeams.add(new Team("Water Works","Americano","💧",79,"AWW"));
+        replacementTeams.add(new Team("Xpresso","Inter","❌",80,"INR"));
+        replacementTeams.add(new Team("FC","Heavy","⚓",81,"HFC"));
+        replacementTeams.add(new Team("Noir","BC","🔍",82,"BCN"));
+        replacementTeams.add(new Team("Stars","The Hall","🦑",83,"THS"));
+        replacementTeams.add(new Team("PODS","THE SHELLED ONE'S","🥜",84,"POD"));
+        replacementTeams.add(new Team("Legends","Vault","🏅",85,"VLT"));
+        replacementTeams.add(new Team("Stars","Rising","💫",86,"RSN"));
+        replacementTeams.add(new Team("Paws","Oxford","🐾",87,"OXF"));
+        replacementTeams.add(new Team("Immortals","Alaskan","🌟",88,"ALK"));
+        replacementTeams.add(new Team("Fireballs","Antarctic","☄",89,"ANT"));
+        replacementTeams.add(new Team("Crabs","Baltimore","🦀",90,"BAL"));
+        replacementTeams.add(new Team("Bicycles","Beijing","🚲",91,"BEI"));
+        replacementTeams.add(new Team("Bay Birds","Boulders","🐧",92,"BBB"));
+        replacementTeams.add(new Team("Bison","Busan","🦬",93,"BSN"));
+        replacementTeams.add(new Team("Artists","Canada","🖼",94,"ART"));
+        replacementTeams.add(new Team("Drop Bears","Canberra","🐨",95,"CDB"));
+        replacementTeams.add(new Team("Queens","Carolina","💎",96,"CRL"));
+        replacementTeams.add(new Team("Cows","Dallas","🐄",97,"COW"));
+        replacementTeams.add(new Team("Dogs","Downward","🐕",98,"DWN"));
+        replacementTeams.add(new Team("Rhinoceroses","Florence","🦏",99,"RNO"));
+        replacementTeams.add(new Team("Hedgehogs","Green Hill","🦔",100,"GHH"));
+        replacementTeams.add(new Team("Boar","Kola","🐗",101,"KOL"));
+        replacementTeams.add(new Team("Llamas","La Paz","🦙",102,"LPL"));
+        replacementTeams.add(new Team("Excavators","Laredo","🏗",103,"LRD"));
+        replacementTeams.add(new Team("Lynx","Libson","⛓",104,"LIB"));
+        replacementTeams.add(new Team("Frogs","London","🐸",105,"LND"));
+        replacementTeams.add(new Team("Lobsters","Louisville","🦞",106,"LSV"));
+        replacementTeams.add(new Team("Whales","Mallorca","🐋",107,"MLR"));
+        replacementTeams.add(new Team("Squirrels","Maryland","🐿",108,"MLD"));
+        replacementTeams.add(new Team("Truckers","Minneapolis","🚚",109,"MNN"));
+        replacementTeams.add(new Team("Eggplants","New Hampshire","🍆",110,"NHE"));
+        replacementTeams.add(new Team("Heartthrobs","Oklahoma","💔",111,"OKL"));
+        replacementTeams.add(new Team("Psychics","Oregon","🧠",112,"ORG"));
+        replacementTeams.add(new Team("Trunks","Phoenix","🐘",113,"PHX"));
+        replacementTeams.add(new Team("Otters","Portland","🦦",114,"OTT"));
+        replacementTeams.add(new Team("Saltines","San Diego","🧂",155,"SDS"));
+        replacementTeams.add(new Team("Parrots","São Paulo","🦜",116,"SPP"));
+        replacementTeams.add(new Team("Dolphins","Wyoming","🐬",117,"WYO"));
     }
 }

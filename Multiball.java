@@ -7,7 +7,7 @@ public class Multiball extends Weather
     }
     
     public void beforePitch(){
-        if(r.nextDouble() > 0.04)
+        if(game.r.nextDouble() > 0.04)
             return;
         endWithOut = false;
         game.addEvent("!!!MULTIBALL!!!");

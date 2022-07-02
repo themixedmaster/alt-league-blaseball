@@ -10,13 +10,8 @@ public class PulsarPulsar extends Weather
         changeWeather();
     }
 
-    public void startOfGame(){
-        weather1.startOfGame();
-        weather2.startOfGame();
-    }
-    
     public String randomFlavor(){
-        int rand = (int)(r.nextDouble() * 3);
+        int rand = (int)(game.r.nextDouble() * 3);
         switch(rand){
             case 0:
                 return "Streams Merge. At the Delta. Birds Chirp. Pulsar(Pulsar) Flares.";
@@ -32,7 +27,7 @@ public class PulsarPulsar extends Weather
     public void changeWeather(){
         randomizeWeathers();
         if(weather1.getClass().equals(weather2.getClass())){
-            double rand = r.nextDouble();
+            double rand = game.r.nextDouble();
             if(rand > 0.25)
                 randomizeWeathers();
         }
@@ -69,15 +64,24 @@ public class PulsarPulsar extends Weather
         return false;
     }
     
+    public void startOfGame(){
+        weather1.startOfGame();
+        weather2.startOfGame();
+    }
+    
     public void beforeAddEvent(){
         weather1.beforeAddEvent();
         weather2.beforeAddEvent();
     }
     
+    public String alterEvent(String event){
+        return weather2.alterEvent(weather1.alterEvent(event));
+    }
+    
     public void beforeFullInning(){
         if(game.inning > 1)
             changeWeather();
-        int random = (int)(r.nextDouble() * 3);
+        int random = (int)(game.r.nextDouble() * 3);
         if(random == 0){
             game.addEvent(randomFlavor());
         }
@@ -181,7 +185,8 @@ public class PulsarPulsar extends Weather
     }
     
     public void afterHomeRun(){
-        
+        weather1.afterHomeRun();
+        weather2.afterHomeRun();
     }
     
     public void beforeEndOfPlay(){

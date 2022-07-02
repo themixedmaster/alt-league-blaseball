@@ -17,7 +17,7 @@ public class FeverPitch extends Weather
     }
     
     public void beforeHalfInning(){
-        if(r.nextDouble() > 0.25)
+        if(game.r.nextDouble() > 0.25)
             return;
         if(favoredTeam.equals(game.pitchingTeam)){
             game.addEvent("The " + game.battingTeam.name + " steal the {FAVOUR OF THE CROWD}!");
@@ -28,7 +28,7 @@ public class FeverPitch extends Weather
     
     public void batterDeclared(){
         targetedPlayer = null;
-        if(r.nextDouble() > 0.05)
+        if(game.r.nextDouble() > 0.05)
             return;
         if(game.battingTeam.equals(favoredTeam)){
             game.addEvent("Cheers targeted at " + game.batter.name + " echo through the crowd!");
@@ -40,7 +40,7 @@ public class FeverPitch extends Weather
     }
     
     public void beforePitch(){
-        if(r.nextDouble() > 0.00003)
+        if(game.r.nextDouble() > 0.00003)
             return;
         Player p = randomTarget();
         boolean favored = false;
@@ -58,7 +58,7 @@ public class FeverPitch extends Weather
             }
         }
         if(favored && unfavored){
-            switch((int)(r.nextDouble() * 2)){
+            switch((int)(game.r.nextDouble() * 2)){
                 case 0:
                     unfavored = false;
                     break;
@@ -70,7 +70,7 @@ public class FeverPitch extends Weather
         
         String statName;
         Stat stat;
-        switch((int)(r.nextDouble() * 2)){
+        switch((int)(game.r.nextDouble() * 2)){
             case 0:
                 stat = p.aggression;
                 statName = "Aggression";
@@ -194,6 +194,6 @@ public class FeverPitch extends Weather
             targets.add(game.pitcher);
         if(!game.waitingPitcher.hasMod("Elsewhere"))
             targets.add(game.waitingPitcher);
-        return targets.get((int)(r.nextDouble() * targets.size()));
+        return targets.get((int)(game.r.nextDouble() * targets.size()));
     }
 }

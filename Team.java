@@ -27,6 +27,7 @@ public class Team
         this.abbreviation = abbreviation;
         this.lineup = lineup;
         this.rotation = rotation;
+        id = League.nextTeamID();
     }
     
     public static Player[] randomPlayerArray(int length){
@@ -48,7 +49,7 @@ public class Team
     }
     
     public boolean equals(Team team){
-        return getTeamName().equals(team.getTeamName());
+        return id == team.id;
     }
     
     public void printTeam(){

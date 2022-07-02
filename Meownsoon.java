@@ -27,10 +27,10 @@ public class Meownsoon extends Weather
         if(!game.top && game.inning == 7){
             game.addEvent("It's the middle of the seventh! The cats stretch!");
         }
-        int random = (int)(r.nextDouble() * 20);
+        int random = (int)(game.r.nextDouble() * 20);
         if((game.inning < 4 || (game.inning == 4 && game.top)) && random == 1)
             random = 2;
-        int rand = (int)(r.nextDouble() * 2);
+        int rand = (int)(game.r.nextDouble() * 2);
         Team team;
         switch(rand){
             case 0:
@@ -53,7 +53,7 @@ public class Meownsoon extends Weather
                 break;
             case 1:
                 String s = "The Meownsoon rains catnip onto the field! All of the cats become";
-                random = (int)(r.nextDouble() * 2);
+                random = (int)(game.r.nextDouble() * 2);
                 switch(random){
                     case 0:
                         game.addEvent(s + " wilder.");
@@ -91,10 +91,10 @@ public class Meownsoon extends Weather
     }
     
     public void beforePitch(){
-        double rand = r.nextDouble();
+        double rand = game.r.nextDouble();
         if(rand > 0.33)
             return;
-        int random = (int)(r.nextDouble() * 4);
+        int random = (int)(game.r.nextDouble() * 4);
         Player p;
         Team t;
         int i = -1;
@@ -104,7 +104,7 @@ public class Meownsoon extends Weather
                 t = game.battingTeam;
                 if(!p.hasMod("Cat"))
                     return;
-                random = (int)(r.nextDouble() * 5);
+                random = (int)(game.r.nextDouble() * 5);
                 switch(random){
                     case 0:
                         game.addEvent(p.name + " leaps into the stands and steals a fan's sunflower seeds! Their batting improves slightly.");
@@ -123,7 +123,7 @@ public class Meownsoon extends Weather
                 p = game.pitcher;
                 if(!p.hasMod("Cat"))
                     return;
-                random = (int)(r.nextDouble() * 4);
+                random = (int)(game.r.nextDouble() * 4);
                 switch(random){
                     case 0:
                         game.addEvent(p.name + " leaps into the stands and steals a fan's chips! Their pitching improves slightly.");
@@ -145,7 +145,7 @@ public class Meownsoon extends Weather
                 p = game.bases[i];
                 if(!p.hasMod("Cat"))
                     return;
-                random = (int)(r.nextDouble() * 4)+1;
+                random = (int)(game.r.nextDouble() * 4)+1;
                 switch(random){
                     case 1:
                         game.addEvent(p.name + " leaps into the stands and steals a fan's slushie! They get a brain freeze, and are swept off base in a frenzy!");
@@ -159,7 +159,7 @@ public class Meownsoon extends Weather
                 p = game.randomDefender();
                 if(!p.hasMod("Cat"))
                     return;
-                random = (int)(r.nextDouble() * 3)+2;
+                random = (int)(game.r.nextDouble() * 3)+2;
                 break;
         }
         switch(random){

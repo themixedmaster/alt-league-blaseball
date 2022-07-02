@@ -13,6 +13,7 @@ public class Game //name will be changed to Game when finished and replace curre
     int dayNum;
     long startTime;
     long currentTime;
+    long interruptTime;
     ArrayList<Event> events;
     Weather weather;
     String weatherName;
@@ -44,7 +45,7 @@ public class Game //name will be changed to Game when finished and replace curre
     boolean teamBScored = false;
 
     Player[] bases;
-    
+
     String gameName;
     public Game(Team teamA, Team teamB, int dayNum, long startTime){
         this.teamA = teamA;
@@ -54,13 +55,19 @@ public class Game //name will be changed to Game when finished and replace curre
         currentTime = startTime;
         events = new ArrayList<Event>();
     }
-    //code is currently in testing phase
-    public void simulateGame(){
-        r = new Random(dayNum * (long)Math.pow(teamA.favor,teamB.favor) + (long)Math.pow(teamB.favor,teamA.favor));
+    
+    public void simulateGame(long time){
+        interruptTime = time;
+        r = new Random((long)(((double)dayNum + (double)teamA.favor + (double)teamB.favor) / (115.0 + 23.0 + 24.0) * Long.MAX_VALUE));
+        for(int x = 0; x < 10;x++)
+            r.nextDouble();
         weather = randomWeather();
         weatherName = weather.name;
         gameName = weatherName + ", " + teamA.getTeamName() + " vs. " + teamB.getTeamName() + ", Day " + dayNum;
         addEvent(teamA.getTeamName() + " vs. " + teamB.getTeamName(),0);
+        //System.out.println(gameName);
+        if(currentTime > interruptTime)
+            return;
 
         inning = 1;
         scoreA = 0;
@@ -74,119 +81,133 @@ public class Game //name will be changed to Game when finished and replace curre
         battingTeam = teamB;
         pitcher = pitcherA;
         waitingPitcher = pitcherB;
-
         for(Player p : teamA.lineup){
-            p.addStatistic("Games played");
+        p.addStatistic("Games played");
         }
         for(Player p : teamB.lineup){
-            p.addStatistic("Games played");
+        p.addStatistic("Games played");
         }
         pitcherA.addStatistic("Games played");
         pitcherB.addStatistic("Games played");
 
         weather.startOfGame();
         addEvent("Blay pall!",tick);
+        if(currentTime > interruptTime)
+        return;
         while(!endOfGame()){
-            if(top)
-                weather.beforeFullInning();
-            weather.beforeHalfInning();
-            String s;
-            if(top)
-                s = "Top";
-            else
-                s = "Bottom";
-            addEvent(s + " of " + inning + ", " + battingTeam.getTeamName() + " batting. " + pitcher.name + " pitching.",tick);
-            pitcher.addStatistic("Innings pitched");
-            clearBases();
-            baseStealOut = false;
-            while(!endOfInning()){
-                if(!baseStealOut)
-                    setNextBatter();
-                baseStealOut = false;
-                int x = 0;
-                while(!strikeout()){
-                    switch(x % 2){
-                        case 0:
-                            doSteals();
-                            break;
-                        case 1:
-                            weather.beforePitch();
-                            doPitch();
-                            weather.afterPitch();
-                            break;
-                    }
-                    x++;
-                    //printBases();//debug feature
-                }
-                if(!out){
-                    pitcher.addStatistic("Strikeouts");
-                    batter.addStatistic("Times struck out");
-                }
-                out = false;
-                outs++;
-                addEvent("[Out " + outs + "]",0);
-            }
-            outs = 0;
-            if(top)
-                top = false;
-            else{
-                top = true;
-                addEvent("Inning " + inning + " is now an Outing.",tick);
-                printScore();
-                inning++;
-            }
-            //switches out batting team
-            Team temp = pitchingTeam;
-            pitchingTeam = battingTeam;
-            battingTeam = temp;
-            //switches out pitcher
-            Player temp2 = pitcher;
-            pitcher = waitingPitcher;
-            waitingPitcher = temp2;
-            //switches out teams' batting positions
-            int temp3 = activeTeamBat;
-            activeTeamBat = inactiveTeamBat;
-            inactiveTeamBat = temp3;
-            if(endOfGame())
-                weather.beforeEndOfPlay();
+        if(top)
+        weather.beforeFullInning();
+        weather.beforeHalfInning();
+        String s;
+        if(top)
+        s = "Top";
+        else
+        s = "Bottom";
+        addEvent(s + " of " + inning + ", " + battingTeam.getTeamName() + " batting. " + pitcher.name + " pitching.",tick);
+        if(currentTime > interruptTime)
+        return;
+        pitcher.addStatistic("Innings pitched");
+        clearBases();
+        baseStealOut = false;
+        while(!endOfInning()){
+        if(!baseStealOut)
+        setNextBatter();
+        baseStealOut = false;
+        int x = 0;
+        while(!strikeout()){
+        switch(x % 2){
+    case 0:
+        doSteals();
+        break;
+    case 1:
+        weather.beforePitch();
+        doPitch();
+        weather.afterPitch();
+        break;
+        }
+        x++;
+        if(currentTime > interruptTime)
+        return;
+        //printBases();//debug feature
+        }
+        if(!out){
+        pitcher.addStatistic("Strikeouts");
+        batter.addStatistic("Times struck out");
+        }
+        out = false;
+        outs++;
+        addEvent("[Out " + outs + "]",0);
+        if(currentTime > interruptTime)
+        return;
+        }
+        outs = 0;
+        if(top)
+        top = false;
+        else{
+        top = true;
+        addEvent("Inning " + inning + " is now an Outing.",tick);
+        if(currentTime > interruptTime)
+        return;
+        printScore();
+        inning++;
+        }
+        //switches out batting team
+        Team temp = pitchingTeam;
+        pitchingTeam = battingTeam;
+        battingTeam = temp;
+        //switches out pitcher
+        Player temp2 = pitcher;
+        pitcher = waitingPitcher;
+        waitingPitcher = temp2;
+        //switches out teams' batting positions
+        int temp3 = activeTeamBat;
+        activeTeamBat = inactiveTeamBat;
+        inactiveTeamBat = temp3;
+        if(endOfGame())
+        weather.beforeEndOfPlay();
         }
         addEvent(teamA.getName() + " " + scoreToString(scoreA) + ", " + teamB.getName() + " " + scoreToString(scoreB),tick);
+        if(currentTime > interruptTime)
+        return;
         giveWins();
         clearGameEffects();
         if(!teamAScored)
-            pitcherB.addStatistic("Shutouts");
+        pitcherB.addStatistic("Shutouts");
         if(!teamBScored)
-            pitcherA.addStatistic("Shutouts");
+        pitcherA.addStatistic("Shutouts");
         weather.endOfGame();
         addEvent("\nGame over.",tick);
-    }
+        if(currentTime > interruptTime)
+        return;
 
-    void clearGameEffects(){
-        for(Player p : activePlayers()){
-            p.clearTemporaryStats();
         }
-    }
 
-    public Player[] activePlayers(){
-        Player[] a = teamA.getActivePlayers();
-        Player[] b = teamB.getActivePlayers();
-        Player[] c = new Player[a.length + b.length];
-        for(int x = 0; x < a.length; x++){
-            c[x] = a[x];
+        void clearGameEffects(){
+            for(Player p : activePlayers()){
+                p.clearTemporaryStats();
+            }
         }
-        for(int x = 0; x < b.length; x++){
-            c[x+a.length] = b[x];
+
+        public Player[] activePlayers(){
+            Player[] a = teamA.getActivePlayers();
+            Player[] b = teamB.getActivePlayers();
+            Player[] c = new Player[a.length + b.length];
+            for(int x = 0; x < a.length; x++){
+                c[x] = a[x];
+            }
+            for(int x = 0; x < b.length; x++){
+                c[x+a.length] = b[x];
+            }
+            return c;
         }
-        return c;
-    }
 
-    public Player randomActivePlayer(){
-        Player[] players = activePlayers();
-        int random = (int)(r.nextDouble() * players.length);
-        return players[random];
-    }
+        public Player randomActivePlayer(){
+            Player[] players = activePlayers();
+            int random = (int)(r.nextDouble() * players.length);
+            return players[random];
+        }
 
-    public Player randomActivePlayer(Team team){
+        public Player randomActivePlayer(Team team){
         Player[] players = team.getActivePlayers();
         int random = (int)(r.nextDouble() * players.length);
         return players[random];
@@ -203,6 +224,10 @@ public class Game //name will be changed to Game when finished and replace curre
         return currentTime >= System.currentTimeMillis() && startTime <= System.currentTimeMillis();
     }
 
+    boolean isFinished(){
+        return System.currentTimeMillis() >= currentTime && !isLive();
+    }
+    
     boolean gameEffectsRecord(){
         return dayNum < 100;
     }
@@ -313,7 +338,7 @@ public class Game //name will be changed to Game when finished and replace curre
         batter.addStatistic("Times pitched to");
         if(batValue > pitchValue){
             pitcher.addStatistic("Balls thrown");
-            pitcher.addStatistic("Balls received");
+            batter.addStatistic("Balls received");
             ball();
             weather.afterBall();
         }else{
@@ -492,7 +517,7 @@ public class Game //name will be changed to Game when finished and replace curre
     boolean strikeout(){
         return weather.alterStrikeout(overStrikeLimit() || out);
     }
-    
+
     boolean overStrikeLimit(){
         return strikes >= 3;
     }
@@ -608,16 +633,35 @@ public class Game //name will be changed to Game when finished and replace curre
         strikes = 0;
         balls = 0;
         do{
+            if(noAvailableBatters(battingTeam))
+                addBatter(battingTeam);
             activeTeamBat++;
             batter = battingTeam.lineup[(activeTeamBat-1) % battingTeam.lineup.length];
             if(batter.hasMod("Elsewhere"))
                 weather.batterElsewhere();
         }while(batter.hasMod("Elsewhere"));
         addEvent(batter.batMessage(battingTeam),tick);
-        batter.addStatistic("Plate appearences");
+        batter.addStatistic("Plate appearances");
         weather.batterDeclared();
     }
 
+    boolean noAvailableBatters(Team t){
+        Player[] lineup = t.lineup;
+        for(Player p : lineup)
+            if(!p.hasMod("Elsewhere"))
+                return false;
+        return true;
+    }
+    
+    void addBatter(Team t){
+        Player[] lineup = t.lineup;
+        Player [] newLineup = new Player[lineup.length + 1];
+        for(int x = 0; x < lineup.length; x++)
+            newLineup[x] = lineup[x];
+        newLineup[lineup.length] = new Player("Pitching Machine");
+        t.lineup = newLineup;
+    }
+    
     void addEvent(String s){
         addEvent(s,tick);
     }
@@ -633,9 +677,10 @@ public class Game //name will be changed to Game when finished and replace curre
     void addEvent(String s, int tick, boolean special){
         currentTime+=tick;
         weather.beforeAddEvent();
+        s = weather.alterEvent(s);
         events.add(new Event(s,currentTime,special));
-        //if(currentTime > startTime + 3600000)
-            //System.out.println(s);
+        //if(currentTime > startTime + 3600000)//3600000
+        //System.out.println(s);
     }
     //precondition: at least 1 event in events
     public void setStartTime(long startTime){
@@ -653,9 +698,9 @@ public class Game //name will be changed to Game when finished and replace curre
     }
 
     int numberOfWeathers(){
-        return 14;
+        return 18;//18
     }
-    
+
     Weather randomWeather(){
         int rand = (int)(r.nextDouble() * numberOfWeathers());
         switch(rand){
@@ -687,6 +732,14 @@ public class Game //name will be changed to Game when finished and replace curre
                 return new NamedWeather(this);
             case 13:
                 return new Brisk(this);
+            case 14:
+                return new SupernovaEclipse(this);
+            case 15:
+                return new Letterball(this);
+            case 16:
+                return new ManyPulsar(this);
+            case 17:
+                return new Jackpot(this);
         }
         return new Weather(this);
     }

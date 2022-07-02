@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Letterball
+comment1.params=game
+comment1.target=Letterball(Game)
+comment2.params=event
+comment2.target=java.lang.String\ alterEvent(java.lang.String)
+comment3.params=
+comment3.target=void\ afterHit()
+numComments=4

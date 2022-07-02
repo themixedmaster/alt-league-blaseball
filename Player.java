@@ -37,11 +37,8 @@ public class Player
     HashMap<String,Double> statistics; //stuff like balls hit, number of pitches, etc
 
     ArrayList<String> mods;
-    //public boolean fan = false; //for altalt fever weather
-    //public boolean cat = false; //for altalt meownsoon weather
-    //public boolean elsewhere = false; //for altalt moon weather
-    //public boolean superCharged = false; //for faraday field weather
-    public Team originalTeam; //used when a player is taken away from their team out of the league
+    public Team originalTeam;
+    public int teamID;
     public Player()
     {
         this(RandomNameGenerator.randomNameWithDistribution() + " " + RandomNameGenerator.randomNameWithDistribution(RandomNameGenerator.random(1,5) + RandomNameGenerator.random(1,5)));

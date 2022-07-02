@@ -6,11 +6,11 @@ public class Strikedown extends Weather
     }
 
     public void beforeHalfInning(){
-        double random = r.nextDouble();
+        double random = game.r.nextDouble();
         if(random <= 0.65)
-            game.addEvent("The " + game.battingTeam.name + " go silent, their bodies moving in mechanical lockstep.");
+            game.addEvent("The " + game.battingTeam.name + " go silent, their bodies moving in mechanical lockstep.",true);
         else{
-            int rand = (int)(r.nextDouble() * 4);
+            int rand = (int)(game.r.nextDouble() * 4);
             switch(rand){
                 case 0:
                     game.addEvent("The " + game.battingTeam.name + " go silent.  The crown boos.");
@@ -29,6 +29,10 @@ public class Strikedown extends Weather
     }
 
     public void beforePitch(){
+        if(game.scoreA > 255 || game.scoreB > 255){
+            game.addEvent("Strike out. The game must end.");
+            game.strikes+=255;
+        }
         game.batter.boostBatting(2);
         game.batter.boostBaserunning(2);
     }

@@ -6,7 +6,7 @@ public class Distortion extends Weather
     }
 
     public void beforePitch(){
-        if(r.nextDouble() > 0.00004 * game.numberOfWeathers())
+        if(game.r.nextDouble() > 0.00004 * game.numberOfWeathers())
             return;
         Player a = game.batter;
         Player b = game.pitcher;

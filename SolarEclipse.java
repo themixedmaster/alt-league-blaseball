@@ -8,13 +8,13 @@ public class SolarEclipse extends Weather
     }
 
     public void beforePitch(){
-        if(r.nextDouble() > 0.00003)
+        if(game.r.nextDouble() > 0.00003)
             return;
         int rand;
         if(game.basesEmpty())
-            rand = (int)(r.nextDouble() * 3);
+            rand = (int)(game.r.nextDouble() * 3);
         else
-            rand = (int)(r.nextDouble() * 4);
+            rand = (int)(game.r.nextDouble() * 4);
         Player p;
         Player replacement = new Player();
         replacement.addStatistic("Added as replacement");

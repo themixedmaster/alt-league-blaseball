@@ -2,4 +2,8 @@
 comment0.target=JSONLoader
 comment1.params=season
 comment1.target=void\ loadLeagueFromJSON(int)
-numComments=2
+comment2.params=playerID
+comment2.target=Player\ getPlayer(int)
+comment3.params=teamID
+comment3.target=Team\ getTeam(int)
+numComments=4

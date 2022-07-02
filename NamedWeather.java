@@ -4,7 +4,7 @@ public class NamedWeather extends Weather
     public NamedWeather(Game game){
         super(game);
         name = "Weather";
-        int rand = (int)(r.nextDouble() * 5);
+        int rand = (int)(game.r.nextDouble() * 5);
         switch(rand){
             case 0:
                 mode = 0;//both teams get 0 wins
@@ -22,7 +22,7 @@ public class NamedWeather extends Weather
         int rand;
         switch(mode){
             case 0:
-                rand = (int)(r.nextDouble() * 7);
+                rand = (int)(game.r.nextDouble() * 7);
                 switch(rand){
                     case 0:
                         game.addEvent("Images taken of the World Meteor Shower by gifted photographer.");
@@ -48,7 +48,7 @@ public class NamedWeather extends Weather
                 }
                 break;
             case 1:
-                rand = (int)(r.nextDouble() * 7);
+                rand = (int)(game.r.nextDouble() * 7);
                 switch(rand){
                     case 0:
                         game.addEvent("Players on the outfield crawl around like snakes.");
@@ -74,7 +74,7 @@ public class NamedWeather extends Weather
                 }
                 break;
             case 2:
-                rand = (int)(r.nextDouble() * 7);
+                rand = (int)(game.r.nextDouble() * 7);
                 switch(rand){
                     case 0:
                         game.addEvent("Strange stone monuments continue to rise in the major cities of the world. Conspiracists still blame Moon aliens.");

@@ -159,6 +159,48 @@ public class Feed
                 }
                 break;
             case 2:
+                statsTracked.add("Games played");
+                statsTracked.add("Plate appearances");
+                statsTracked.add("Runs scored");
+                statsTracked.add("Hits");
+                statsTracked.add("Singles hit");
+                statsTracked.add("Doubles hit");
+                statsTracked.add("Triples hit");
+                statsTracked.add("Home runs hit");
+                statsTracked.add("Walks");
+                statsTracked.add("Times struck out");
+                statsTracked.add("Foul balls hit");
+                statsTracked.add("Flyouts hit");
+                statsTracked.add("Ground outs hit");
+                statsTracked.add("Base steal attempts");
+                statsTracked.add("Bases stolen");
+                statsTracked.add("Caught stealing");
+                statsTracked.add("Second base stolen");
+                statsTracked.add("Caught stealing second base");
+                statsTracked.add("Third base stolen");
+                statsTracked.add("Caught stealing third base");
+                statsTracked.add("Home stolen");
+                statsTracked.add("Caught stealing home");
+                statsTracked.add("Times pitched to");
+                statsTracked.add("Strikes");
+                statsTracked.add("Swinging strikes");
+                statsTracked.add("Looking strikes");
+                statsTracked.add("Balls received");
+                statsTracked.add("Flyouts caught");
+                statsTracked.add("Ground outs fielded");
+                statsTracked.add("Pitcher wins");
+                statsTracked.add("Shutouts");
+                statsTracked.add("Innings pitched");
+                statsTracked.add("Strikeouts");
+                statsTracked.add("Pitches thrown");
+                statsTracked.add("Balls thrown");
+                statsTracked.add("Foul balls pitched");
+                statsTracked.add("Walks allowed");
+                statsTracked.add("Singles allowed");
+                statsTracked.add("Doubles allowed");
+                statsTracked.add("Triples allowed");
+                statsTracked.add("Home runs allowed");
+                statsTracked.add("Runs allowed");
                 for(Player p : players){
                     for(Map.Entry<String,Double> entry : p.statistics.entrySet()){
                         if(!statsTracked.contains(entry.getKey()))
@@ -237,7 +279,7 @@ public class Feed
         ArrayList<Game> games = filterByHasStarted(League.getAllGames());
         filterGames(games);
     }
-    
+
     static void filterGames(ArrayList<Game> games){
         System.out.println("Which games do you want to view?");
         System.out.println("0-All games");
@@ -281,7 +323,7 @@ public class Feed
         }
         return filteredList;
     }
-    
+
     public static ArrayList<Game> filterByDay(ArrayList<Game> games){
         System.out.println("Which game day would you like to view?");
         int day = console.nextInt();
